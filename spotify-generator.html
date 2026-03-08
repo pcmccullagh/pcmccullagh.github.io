@@ -1181,11 +1181,7 @@ async function savePlaylist() {
 document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('redirect-uri-display').textContent = REDIRECT_URI;
 
-  // Pre-fill saved keys (seed default Gemini key if none stored yet)
-  const DEFAULT_GEMINI_KEY = 'AIzaSyDMQy-j3SEkNT646queI52RaJgUiyTi_RM';
-  if (!localStorage.getItem('gemini_api_key')) {
-    localStorage.setItem('gemini_api_key', DEFAULT_GEMINI_KEY);
-  }
+  // Pre-fill saved keys
   const savedClientId = localStorage.getItem('sp_client_id');
   const savedGeminiKey = localStorage.getItem('gemini_api_key');
   if (savedClientId) document.getElementById('client-id-input').value = savedClientId;
