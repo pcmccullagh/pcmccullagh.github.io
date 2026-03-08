@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Spotify Playlist Generator</title>
+  <title>Playlist Generator</title>
   <style>
     :root {
       --green: #1DB954;
@@ -28,340 +28,121 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .screen {
-      display: none;
-      flex-direction: column;
-      min-height: 100vh;
-      padding: 24px 20px;
-      max-width: 480px;
-      margin: 0 auto;
-    }
+    .screen { display: none; flex-direction: column; min-height: 100vh; padding: 24px 20px; max-width: 480px; margin: 0 auto; }
     .screen.active { display: flex; }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .logo-text {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .logo-text { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
 
-    .hero {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 24px 0;
-    }
-    .hero h1 {
-      font-size: 30px;
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 12px;
-    }
+    .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px 0; }
+    .hero h1 { font-size: 30px; font-weight: 800; line-height: 1.15; margin-bottom: 12px; }
     .hero h1 .sp { color: var(--green); }
     .hero h1 .gm { color: var(--blue); }
-    .hero p {
-      color: var(--text-muted);
-      font-size: 15px;
-      line-height: 1.6;
-      margin-bottom: 28px;
-    }
+    .hero p { color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 28px; }
 
     .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 16px 24px;
-      border-radius: 50px;
-      border: none;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 16px 24px; border-radius: 50px; border: none;
+      font-size: 15px; font-weight: 700; cursor: pointer;
       transition: transform 0.1s, opacity 0.2s, background 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
     .btn:active { transform: scale(0.97); }
     .btn-green { background: var(--green); color: #000; }
     .btn-green:hover { background: var(--green-dark); }
-    .btn-outline {
-      background: transparent;
-      color: var(--text);
-      border: 2px solid var(--surface3);
-    }
+    .btn-outline { background: transparent; color: var(--text); border: 2px solid var(--surface3); }
     .btn-outline:hover { border-color: var(--text-muted); }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* Setup card */
-    .setup-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 20px;
-    }
-    .setup-step {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      padding: 11px 0;
-      border-bottom: 1px solid var(--surface2);
-    }
-    .setup-step:last-child { border-bottom: none; padding-bottom: 0; }
-    .step-num {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--green);
-      color: #000;
-      font-size: 11px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .step-num.blue { background: var(--blue); color: #fff; }
-    .step-text { font-size: 13.5px; line-height: 1.5; color: var(--text-muted); }
-    .step-text strong { color: var(--text); }
-    .step-text a { color: var(--green); text-decoration: none; }
-    .step-text a.blue-link { color: #7baaf7; }
-
     .field { margin-bottom: 14px; }
-    .field label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 7px;
+    .field label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+    .field input, .field select, .field textarea {
+      width: 100%; background: var(--surface2); border: 1.5px solid var(--surface3);
+      border-radius: 8px; color: var(--text); font-size: 15px; padding: 12px 14px;
+      outline: none; transition: border-color 0.2s; font-family: inherit; resize: none;
     }
-    .field input, .field select {
-      width: 100%;
-      background: var(--surface2);
-      border: 1.5px solid var(--surface3);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 15px;
-      padding: 12px 14px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .field input:focus, .field select:focus { border-color: var(--green); }
-    .field input::placeholder { color: #555; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--green); }
+    .field input::placeholder, .field textarea::placeholder { color: #555; }
 
-    /* Progress */
-    .progress-wrap {
-      background: var(--surface2);
-      border-radius: 4px;
-      overflow: hidden;
-      height: 4px;
-      margin-bottom: 10px;
-      width: 100%;
-    }
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--green), var(--blue));
-      border-radius: 4px;
-      transition: width 0.5s ease;
-      width: 0%;
-    }
-    .progress-label {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      min-height: 18px;
-      text-align: center;
-    }
-
-    .spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid var(--surface2);
-      border-top-color: var(--green);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 32px auto 24px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Track list */
-    .section-title {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      margin-top: 22px;
-    }
-    .track-list { list-style: none; }
-    .track-item {
-      border-bottom: 1px solid var(--surface2);
-    }
-    .track-item:last-child { border-bottom: none; }
-
-    .track-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 9px 0;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .track-row:active { opacity: 0.7; }
-
-    .track-num {
-      font-size: 12px;
-      color: var(--text-muted);
-      width: 20px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .track-art {
-      width: 44px; height: 44px;
-      border-radius: 4px;
-      object-fit: cover;
-      background: var(--surface3);
-      flex-shrink: 0;
-    }
-    .track-art-placeholder {
-      width: 44px; height: 44px;
-      border-radius: 4px;
-      background: var(--surface3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .track-info { flex: 1; min-width: 0; }
-    .track-name {
-      font-size: 14px;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .track-artist {
-      font-size: 12px;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-top: 2px;
-    }
-    .track-item.not-found .track-name { color: var(--text-muted); }
-
-    .play-icon {
-      flex-shrink: 0;
-      color: var(--text-muted);
-      transition: color 0.15s;
-    }
-    .track-row:hover .play-icon { color: var(--green); }
-    .track-item.expanded .play-icon { color: var(--green); }
-    .not-found-badge {
-      font-size: 10px;
-      color: #666;
-      background: var(--surface2);
-      border-radius: 4px;
-      padding: 2px 6px;
-      flex-shrink: 0;
-    }
-
-    .embed-wrap {
-      display: none;
-      padding: 0 0 10px 32px;
-    }
-    .embed-wrap.open { display: block; }
-    .embed-wrap iframe {
-      border-radius: 8px;
-      width: 100%;
-    }
-
-    /* Playlist header card */
-    .playlist-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 14px;
-      display: flex;
-      gap: 14px;
-      align-items: center;
-    }
-    .playlist-art {
-      width: 68px; height: 68px;
-      border-radius: 8px;
-      object-fit: cover;
-      background: var(--surface3);
-      flex-shrink: 0;
-    }
-    .playlist-info h2 { font-size: 17px; font-weight: 800; line-height: 1.2; margin-bottom: 4px; }
-    .playlist-info p { font-size: 13px; color: var(--text-muted); }
-
-    /* Gemini note */
-    .gemini-note {
-      background: rgba(66, 133, 244, 0.08);
-      border: 1px solid rgba(66, 133, 244, 0.2);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      color: #7baaf7;
-      margin-bottom: 4px;
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-    }
-
-    /* Error */
     .error-banner {
-      background: rgba(231, 76, 60, 0.12);
-      border: 1px solid rgba(231, 76, 60, 0.35);
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 13.5px;
-      color: #ff7070;
-      margin-bottom: 14px;
-      display: none;
+      background: rgba(231, 76, 60, 0.12); border: 1px solid rgba(231, 76, 60, 0.35);
+      border-radius: 8px; padding: 12px 16px; font-size: 13.5px; color: #ff7070;
+      margin-bottom: 14px; display: none;
     }
     .error-banner.visible { display: block; }
 
-    .divider { height: 1px; background: var(--surface2); margin: 18px 0; }
-    .text-center { text-align: center; }
-    .text-muted { color: var(--text-muted); font-size: 13px; }
+    .spinner {
+      width: 48px; height: 48px; border: 4px solid var(--surface2);
+      border-top-color: var(--green); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 32px auto 24px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .progress-wrap { background: var(--surface2); border-radius: 4px; overflow: hidden; height: 4px; margin-bottom: 10px; width: 100%; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--green), var(--blue)); border-radius: 4px; transition: width 0.5s ease; width: 0%; }
+    .progress-label { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; min-height: 18px; text-align: center; }
+
+    .section-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; margin-top: 22px; }
+
+    .track-list { list-style: none; }
+    .track-item { border-bottom: 1px solid var(--surface2); }
+    .track-item:last-child { border-bottom: none; }
+
+    .track-row {
+      display: flex; align-items: center; gap: 12px; padding: 11px 0;
+    }
+    .track-num { font-size: 12px; color: var(--text-muted); width: 22px; text-align: right; flex-shrink: 0; }
+    .track-info { flex: 1; min-width: 0; }
+    .track-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-artist { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+    .track-why { font-size: 11.5px; color: #7baaf7; margin-top: 3px; line-height: 1.4; white-space: normal; }
+
+    .sp-btn {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--green); border: none; cursor: pointer;
+      text-decoration: none; transition: background 0.15s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sp-btn:hover { background: var(--green-dark); }
+    .sp-btn:active { transform: scale(0.93); }
 
     .back-btn {
-      background: none; border: none;
-      color: var(--text-muted);
-      font-size: 14px; cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
+      background: none; border: none; color: var(--text-muted); font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
       padding: 0; margin-bottom: 20px;
     }
     .back-btn:hover { color: var(--text); }
 
     .scrollable { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-
     .sticky-bottom {
-      position: sticky;
-      bottom: 0;
+      position: sticky; bottom: 0;
       background: linear-gradient(transparent, var(--bg) 30%);
-      padding: 14px 0 24px;
-      margin-top: 8px;
+      padding: 14px 0 24px; margin-top: 8px;
     }
 
-    .hint {
-      font-size: 12px;
-      color: var(--text-muted);
-      text-align: center;
-      margin-top: 10px;
+    .divider { height: 1px; background: var(--surface2); margin: 18px 0; }
+    .text-center { text-align: center; }
+    .text-muted { color: var(--text-muted); font-size: 13px; }
+
+    .setup-card { background: var(--surface); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 20px; }
+    .setup-step { display: flex; gap: 14px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--surface2); }
+    .setup-step:last-child { border-bottom: none; padding-bottom: 0; }
+    .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .step-text { font-size: 13.5px; line-height: 1.5; color: var(--text-muted); }
+    .step-text strong { color: var(--text); }
+    .step-text a { color: #7baaf7; text-decoration: none; }
+
+    .vibe-pill {
+      display: inline-block; background: var(--surface2); border-radius: 50px;
+      padding: 6px 14px; font-size: 13px; font-weight: 600; color: var(--text-muted);
+      cursor: pointer; border: 1.5px solid transparent;
+      transition: border-color 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
+    .vibe-pill:hover, .vibe-pill.active { border-color: var(--green); color: var(--green); }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
   </style>
 </head>
 <body>
@@ -369,16 +150,16 @@
 <!-- SCREEN 1: SETUP -->
 <div id="screen-setup" class="screen">
   <div class="logo">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="12" fill="#1DB954"/>
-      <path d="M17.5 10.2c-3.2-1.9-8.4-2.1-11.4-1.1-.5.1-1-.1-1.2-.6-.1-.5.1-1 .6-1.2 3.5-1.1 9.2-.9 12.9 1.3.4.3.6.8.3 1.3-.3.4-.8.6-1.2.3zM17.2 13.1c-.2.4-.7.5-1.1.3-2.7-1.6-6.8-2.1-10-.1-.4.2-.9 0-1.1-.4-.2-.4 0-.9.4-1.1 3.6-2.2 8.2-1.6 11.3.2.4.2.5.7.5 1.1zM16 15.9c-.2.3-.6.4-.9.2-2.3-1.4-5.3-1.7-8.7-.9-.3.1-.7-.1-.8-.4-.1-.3.1-.7.4-.8 3.8-.8 7 .5 9.6 1 .3.2.5.6.4.9z" fill="#000"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#4285f4"/>
+      <path d="M12 3l1.5 4.5H18l-3.75 2.7 1.5 4.5L12 12l-3.75 2.7 1.5-4.5L6 7.5h4.5L12 3z" fill="#fff"/>
     </svg>
-    <span class="logo-text">Playlist Generator</span>
+    <span class="logo-text">AI Playlist Generator</span>
   </div>
 
   <div class="hero">
-    <h1>Powered by <span class="sp">Spotify</span> + <span class="gm">Gemini</span></h1>
-    <p>Paste any public Spotify playlist. Gemini picks fresh songs with the same vibe. Tap any track to preview it.</p>
+    <h1>Discover music with <span class="gm">Gemini</span></h1>
+    <p>Describe your vibe or pick some artists — Gemini will build you a playlist. No Spotify account needed.</p>
 
     <div id="setup-error" class="error-banner"></div>
 
@@ -386,31 +167,13 @@
       <div class="setup-step">
         <div class="step-num">1</div>
         <div class="step-text">
-          Go to <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a>, create a free app (set redirect URI to <strong>http://localhost</strong>), then copy your <strong>Client ID</strong> and <strong>Client Secret</strong>.
+          Get a free <strong>Gemini API key</strong> at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>.
         </div>
       </div>
       <div class="setup-step">
-        <div class="step-num blue">2</div>
-        <div class="step-text">
-          Get a free <strong>Gemini API key</strong> at <a class="blue-link" href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>.
-        </div>
+        <div class="step-num">2</div>
+        <div class="step-text">Paste it below and you're good to go.</div>
       </div>
-      <div class="setup-step">
-        <div class="step-num">3</div>
-        <div class="step-text">Enter all three below — stored in your browser only.</div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Spotify Client ID</label>
-      <input id="client-id-input" type="text" placeholder="e.g. 3f2b9a…"
-        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
-    </div>
-
-    <div class="field">
-      <label>Spotify Client Secret</label>
-      <input id="client-secret-input" type="password" placeholder="e.g. 7c4d1e…"
-        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
     </div>
 
     <div class="field">
@@ -421,35 +184,35 @@
 
     <button class="btn btn-green" onclick="saveSetup()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-      Save & Continue
+      Get Started
     </button>
   </div>
 
-  <p class="text-muted text-center">No Spotify login required — works with any public playlist.</p>
+  <p class="text-muted text-center">Your key is stored in your browser only.</p>
 </div>
 
 <!-- SCREEN 2: MAIN -->
 <div id="screen-main" class="screen">
   <div class="logo">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="12" fill="#1DB954"/>
-      <path d="M17.5 10.2c-3.2-1.9-8.4-2.1-11.4-1.1-.5.1-1-.1-1.2-.6-.1-.5.1-1 .6-1.2 3.5-1.1 9.2-.9 12.9 1.3.4.3.6.8.3 1.3-.3.4-.8.6-1.2.3zM17.2 13.1c-.2.4-.7.5-1.1.3-2.7-1.6-6.8-2.1-10-.1-.4.2-.9 0-1.1-.4-.2-.4 0-.9.4-1.1 3.6-2.2 8.2-1.6 11.3.2.4.2.5.7.5 1.1zM16 15.9c-.2.3-.6.4-.9.2-2.3-1.4-5.3-1.7-8.7-.9-.3.1-.7-.1-.8-.4-.1-.3.1-.7.4-.8 3.8-.8 7 .5 9.6 1 .3.2.5.6.4.9z" fill="#000"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#4285f4"/>
+      <path d="M12 3l1.5 4.5H18l-3.75 2.7 1.5 4.5L12 12l-3.75 2.7 1.5-4.5L6 7.5h4.5L12 3z" fill="#fff"/>
     </svg>
-    <span class="logo-text">Playlist Generator</span>
+    <span class="logo-text">AI Playlist Generator</span>
   </div>
 
   <div class="hero">
-    <h1>Paste your <span class="sp">Spotify</span> playlist</h1>
-    <p>Gemini will recommend new songs with the same vibe. Tap any result to hear a preview.</p>
+    <h1>What's your <span class="gm">vibe</span>?</h1>
 
     <div id="main-error" class="error-banner"></div>
 
     <div class="field">
-      <label>Playlist URL or ID</label>
-      <input id="playlist-input" type="url"
-        placeholder="https://open.spotify.com/playlist/…"
-        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+      <label>Describe your mood or taste</label>
+      <textarea id="vibe-input" rows="3"
+        placeholder="e.g. upbeat indie pop for a road trip, similar to Tame Impala and Beach House"></textarea>
     </div>
+
+    <div class="pill-row" id="quick-vibes"></div>
 
     <div class="field">
       <label>Number of songs</label>
@@ -463,21 +226,21 @@
 
     <button class="btn btn-green" onclick="generate()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
-      Generate with Gemini
+      Generate Playlist
     </button>
   </div>
 
   <div class="divider"></div>
-  <button class="btn btn-outline" onclick="resetSetup()">Change API Keys</button>
+  <button class="btn btn-outline" onclick="resetSetup()">Change API Key</button>
 </div>
 
 <!-- SCREEN 3: LOADING -->
 <div id="screen-loading" class="screen">
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;">
     <div class="spinner"></div>
-    <h2 style="font-size:19px;margin-bottom:16px;text-align:center;">Working on it…</h2>
+    <h2 style="font-size:19px;margin-bottom:16px;text-align:center;">Building your playlist…</h2>
     <div class="progress-wrap"><div id="progress-bar" class="progress-bar"></div></div>
-    <p id="progress-label" class="progress-label">Starting…</p>
+    <p id="progress-label" class="progress-label">Asking Gemini…</p>
   </div>
 </div>
 
@@ -489,17 +252,10 @@
   </button>
 
   <div class="scrollable">
-    <div class="section-title">Original Playlist</div>
-    <div id="source-playlist-card" class="playlist-card"></div>
-
-    <div class="section-title">Recommended Playlist (<span id="result-count">0</span> songs)</div>
-    <div id="result-error" class="error-banner"></div>
-    <div id="gemini-note" class="gemini-note" style="display:none">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;margin-top:1px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-      <span id="gemini-note-text"></span>
-    </div>
+    <div class="section-title">Your Playlist — <span id="result-count">0</span> songs</div>
+    <p id="result-vibe" style="font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.5;font-style:italic;"></p>
     <ul id="result-track-list" class="track-list"></ul>
-    <p class="hint" style="margin-bottom: 16px;">Tap any song to preview it</p>
+    <p style="font-size:12px;color:#555;text-align:center;margin:16px 0 8px;">Tap <span style="color:var(--green)">▶</span> to open in Spotify</p>
 
     <div class="sticky-bottom">
       <button class="btn btn-outline" onclick="generate()">
@@ -511,153 +267,23 @@
 </div>
 
 <script>
-const SP_API = 'https://api.spotify.com/v1';
 const GEMINI_MODEL = 'gemini-2.0-flash';
 
-// ── Spotify client credentials ──────────────────
-async function getToken() {
-  const exp = parseInt(localStorage.getItem('sp_token_expires') || 0);
-  if (Date.now() < exp - 30000) return localStorage.getItem('sp_access_token');
+const QUICK_VIBES = [
+  'Chill lo-fi study vibes',
+  'Energetic workout',
+  'Late night drives',
+  'Happy indie pop',
+  'Moody R&B',
+  'Classic rock anthems',
+  'Focus & deep work',
+  'Feel-good 2000s hits',
+];
 
-  const clientId     = localStorage.getItem('sp_client_id');
-  const clientSecret = localStorage.getItem('sp_client_secret');
-  if (!clientId || !clientSecret) return null;
-
-  const res = await fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
-    },
-    body: 'grant_type=client_credentials',
-  });
-  if (!res.ok) throw new Error('Failed to authenticate with Spotify. Check your Client ID and Secret.');
-  const data = await res.json();
-  localStorage.setItem('sp_access_token', data.access_token);
-  localStorage.setItem('sp_token_expires', Date.now() + data.expires_in * 1000);
-  return data.access_token;
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-async function spApi(path) {
-  const token = await getToken();
-  const res = await fetch(SP_API + path, {
-    headers: { Authorization: 'Bearer ' + token },
-  });
-  if (!res.ok) {
-    const e = await res.json().catch(() => ({}));
-    const msg = e.error?.message || `Spotify API error ${res.status}`;
-    if (res.status === 403) throw new Error('Spotify returned 403 Forbidden — the playlist must be set to Public. Open it in Spotify → ··· → Make public.');
-    throw new Error(msg);
-  }
-  return res.json();
-}
-
-// ── Fetch playlist tracks ───────────────────────
-async function getPlaylistTracks(playlistId) {
-  let tracks = [], url = `/playlists/${playlistId}/tracks?limit=50&fields=next,items(track(id,name,artists,album,uri))`;
-  while (url) {
-    const data = await spApi(url);
-    const valid = (data.items || []).filter(i => i.track?.id);
-    tracks = tracks.concat(valid.map(i => i.track));
-    url = data.next ? data.next.replace(SP_API, '') : null;
-  }
-  return tracks;
-}
-
-// ── Gemini recommendations ──────────────────────
-async function askGemini(tracks, playlistName, desiredCount) {
-  const apiKey = localStorage.getItem('gemini_api_key');
-  const songList = tracks.slice(0, 60).map(t =>
-    `"${t.name}" by ${t.artists.map(a => a.name).join(', ')}`
-  ).join('\n');
-
-  const prompt = `You are a music expert. Analyze this Spotify playlist called "${playlistName}" and recommend ${desiredCount} new songs with the same vibe, genre, and energy.
-
-Source playlist songs:
-${songList}
-
-Rules:
-- Do NOT include any songs already in the playlist
-- Match the genre, mood, energy, and era closely
-- Include a mix of popular and lesser-known tracks
-- Return ONLY a JSON array, no markdown, no explanation
-
-Format:
-[{"title": "Song Name", "artist": "Artist Name"}, ...]`;
-
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.9, maxOutputTokens: 4096 },
-      }),
-    }
-  );
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error('Gemini error: ' + (err.error?.message || res.status));
-  }
-
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  const jsonMatch = text.match(/\[[\s\S]*\]/);
-  if (!jsonMatch) throw new Error('Gemini returned an unexpected format. Try again.');
-  const recs = JSON.parse(jsonMatch[0]);
-  if (!Array.isArray(recs)) throw new Error('Invalid response from Gemini.');
-  return recs.filter(r => r.title && r.artist);
-}
-
-// ── Search Spotify ──────────────────────────────
-async function searchSpotify(title, artist) {
-  const q = encodeURIComponent(`track:${title} artist:${artist}`);
-  const data = await spApi(`/search?q=${q}&type=track&limit=1`);
-  return data?.tracks?.items?.[0] || null;
-}
-
-async function resolveRecommendations(recs, setProgress, startPct, endPct) {
-  const found = [], notFound = [];
-  for (let i = 0; i < recs.length; i++) {
-    const r = recs[i];
-    setProgress(
-      Math.round(startPct + ((i + 1) / recs.length) * (endPct - startPct)),
-      `Finding "${r.title}" on Spotify… (${i + 1}/${recs.length})`
-    );
-    try {
-      const track = await searchSpotify(r.title, r.artist);
-      if (track) found.push(track);
-      else notFound.push(r);
-    } catch (_) {
-      notFound.push(r);
-    }
-  }
-  return { found, notFound };
-}
-
-// ── Helpers ─────────────────────────────────────
-function parsePlaylistId(input) {
-  input = input.trim();
-  const urlM = input.match(/playlist\/([A-Za-z0-9]+)/);
-  if (urlM) return urlM[1];
-  const uriM = input.match(/spotify:playlist:([A-Za-z0-9]+)/);
-  if (uriM) return uriM[1];
-  if (/^[A-Za-z0-9]{15,30}$/.test(input)) return input;
-  return null;
-}
-
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function msToMin(ms) {
-  const s = Math.round(ms / 1000);
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
-}
-
-// ── UI helpers ───────────────────────────────────
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
@@ -681,154 +307,129 @@ function setProgress(pct, label) {
 
 // ── Setup ────────────────────────────────────────
 function saveSetup() {
-  const clientId     = document.getElementById('client-id-input').value.trim();
-  const clientSecret = document.getElementById('client-secret-input').value.trim();
-  const geminiKey    = document.getElementById('gemini-key-input').value.trim();
+  const key = document.getElementById('gemini-key-input').value.trim();
   clearError('setup-error');
-
-  if (!clientId)     { showError('setup-error', 'Please enter your Spotify Client ID.');     return; }
-  if (!clientSecret) { showError('setup-error', 'Please enter your Spotify Client Secret.'); return; }
-  if (!geminiKey)    { showError('setup-error', 'Please enter your Gemini API Key.');        return; }
-
-  localStorage.setItem('sp_client_id',     clientId);
-  localStorage.setItem('sp_client_secret', clientSecret);
-  localStorage.setItem('gemini_api_key',   geminiKey);
+  if (!key) { showError('setup-error', 'Please enter your Gemini API Key.'); return; }
+  localStorage.setItem('gemini_api_key', key);
   showScreen('main');
 }
 
-function resetSetup() {
-  showScreen('setup');
-}
+function resetSetup() { showScreen('setup'); }
 
-// ── Render results ───────────────────────────────
-function renderSourceCard(playlist) {
-  const img   = playlist.images?.[0]?.url;
-  const count = playlist.tracks?.total || 0;
-  document.getElementById('source-playlist-card').innerHTML = `
-    ${img ? `<img class="playlist-art" src="${escHtml(img)}" alt="" />` : ''}
-    <div class="playlist-info">
-      <h2>${escHtml(playlist.name)}</h2>
-      <p>${escHtml(playlist.owner?.display_name || '')} · ${count} songs</p>
-    </div>`;
-}
-
-function toggleEmbed(item, trackId) {
-  const wrap = item.querySelector('.embed-wrap');
-  const isOpen = wrap.classList.contains('open');
-
-  // Close any other open embeds
-  document.querySelectorAll('.embed-wrap.open').forEach(w => {
-    w.classList.remove('open');
-    w.innerHTML = '';
-    w.closest('.track-item').classList.remove('expanded');
+// ── Quick vibe pills ─────────────────────────────
+function buildPills() {
+  const row = document.getElementById('quick-vibes');
+  QUICK_VIBES.forEach(v => {
+    const pill = document.createElement('span');
+    pill.className = 'vibe-pill';
+    pill.textContent = v;
+    pill.onclick = () => {
+      document.querySelectorAll('.vibe-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      document.getElementById('vibe-input').value = v;
+    };
+    row.appendChild(pill);
   });
-
-  if (!isOpen) {
-    wrap.innerHTML = `<iframe
-      src="https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0"
-      height="80"
-      frameborder="0"
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy"></iframe>`;
-    wrap.classList.add('open');
-    item.classList.add('expanded');
-  }
 }
 
-function renderTrackList(found, notFound) {
+// ── Gemini ────────────────────────────────────────
+async function askGemini(vibe, count) {
+  const apiKey = localStorage.getItem('gemini_api_key');
+
+  const prompt = `You are a music expert and DJ. Create a ${count}-song playlist for someone who wants: "${vibe}".
+
+Return ONLY a JSON object with this exact structure, no markdown:
+{
+  "summary": "One sentence describing the playlist vibe",
+  "tracks": [
+    {"title": "Song Title", "artist": "Artist Name", "why": "One short phrase why it fits"}
+  ]
+}
+
+Rules:
+- Exactly ${count} tracks
+- Mix well-known and lesser-known songs
+- All tracks must genuinely match the requested vibe
+- Keep "why" to 5 words or fewer`;
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 1.0, maxOutputTokens: 4096 },
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error('Gemini error: ' + (err.error?.message || res.status));
+  }
+
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error('Unexpected response from Gemini. Try again.');
+  const result = JSON.parse(jsonMatch[0]);
+  if (!Array.isArray(result.tracks)) throw new Error('Invalid response format from Gemini.');
+  return result;
+}
+
+// ── Render ────────────────────────────────────────
+function renderTracks(tracks) {
   const list = document.getElementById('result-track-list');
   list.innerHTML = '';
 
-  found.forEach((track, i) => {
-    const img    = track.album?.images?.[1]?.url || track.album?.images?.[0]?.url;
-    const artist = track.artists.map(a => a.name).join(', ');
-    const trackId = track.id;
+  tracks.forEach((t, i) => {
+    const searchQ = encodeURIComponent(`${t.title} ${t.artist}`);
+    const spotifyUrl = `https://open.spotify.com/search/${searchQ}`;
 
     const li = document.createElement('li');
     li.className = 'track-item';
     li.innerHTML = `
-      <div class="track-row" onclick="toggleEmbed(this.closest('.track-item'), '${escHtml(trackId)}')">
-        <span class="track-num">${i + 1}</span>
-        ${img
-          ? `<img class="track-art" src="${escHtml(img)}" alt="" loading="lazy" />`
-          : `<div class="track-art-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="#555"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>`}
-        <div class="track-info">
-          <div class="track-name">${escHtml(track.name)}</div>
-          <div class="track-artist">${escHtml(artist)}</div>
-        </div>
-        <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-      </div>
-      <div class="embed-wrap"></div>`;
-    list.appendChild(li);
-  });
-
-  notFound.forEach((r, i) => {
-    const li = document.createElement('li');
-    li.className = 'track-item not-found';
-    li.innerHTML = `
       <div class="track-row">
-        <span class="track-num">${found.length + i + 1}</span>
-        <div class="track-art-placeholder" style="background:#1a1a1a;border:1px dashed #333">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#444"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-        </div>
+        <span class="track-num">${i + 1}</span>
         <div class="track-info">
-          <div class="track-name">${escHtml(r.title)}</div>
-          <div class="track-artist">${escHtml(r.artist)}</div>
+          <div class="track-name">${escHtml(t.title)}</div>
+          <div class="track-artist">${escHtml(t.artist)}</div>
+          ${t.why ? `<div class="track-why">${escHtml(t.why)}</div>` : ''}
         </div>
-        <span class="not-found-badge">not found</span>
+        <a class="sp-btn" href="${spotifyUrl}" target="_blank" title="Open in Spotify" aria-label="Open in Spotify">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#000"><path d="M8 5v14l11-7z"/></svg>
+        </a>
       </div>`;
     list.appendChild(li);
   });
 }
 
-// ── Main generate flow ───────────────────────────
+// ── Generate ──────────────────────────────────────
 async function generate() {
-  const input       = document.getElementById('playlist-input').value;
-  const desiredSize = parseInt(document.getElementById('playlist-size').value);
+  const vibe = document.getElementById('vibe-input').value.trim();
+  const count = parseInt(document.getElementById('playlist-size').value);
   clearError('main-error');
-  clearError('result-error');
 
-  const playlistId = parsePlaylistId(input);
-  if (!playlistId) {
-    showError('main-error', 'Please enter a valid Spotify playlist URL or ID.');
+  if (!vibe) {
+    showError('main-error', 'Describe a vibe or pick one of the quick options above.');
     return;
   }
 
   showScreen('loading');
-  setProgress(5, 'Fetching playlist…');
+  setProgress(20, 'Asking Gemini for recommendations…');
 
   try {
-    const playlist = await spApi(`/playlists/${playlistId}?fields=id,name,images,owner,tracks(total)`);
-    renderSourceCard(playlist);
-    setProgress(15, `Found "${playlist.name}" — reading tracks…`);
+    const result = await askGemini(vibe, count);
+    setProgress(90, `Got ${result.tracks.length} songs — rendering…`);
 
-    const tracks = await getPlaylistTracks(playlistId);
-    if (tracks.length === 0) throw new Error('This playlist appears to be empty.');
-    setProgress(35, `Read ${tracks.length} songs. Asking Gemini for recommendations…`);
-
-    const geminiRecs = await askGemini(tracks, playlist.name, desiredSize);
-    setProgress(60, `Gemini suggested ${geminiRecs.length} songs. Looking them up on Spotify…`);
-
-    const { found, notFound } = await resolveRecommendations(geminiRecs, setProgress, 60, 95);
-
-    renderTrackList(found, notFound);
-    document.getElementById('result-count').textContent = found.length + notFound.length;
-
-    const noteEl   = document.getElementById('gemini-note');
-    const noteText = document.getElementById('gemini-note-text');
-    if (notFound.length > 0) {
-      noteText.textContent = `${notFound.length} suggestion${notFound.length > 1 ? 's' : ''} couldn't be found on Spotify (shown greyed out) — tap the others to preview.`;
-      noteEl.style.display = 'flex';
-    } else {
-      noteEl.style.display = 'none';
-    }
+    document.getElementById('result-count').textContent = result.tracks.length;
+    document.getElementById('result-vibe').textContent = result.summary || '';
+    renderTracks(result.tracks);
 
     setProgress(100, 'Done!');
-    await new Promise(r => setTimeout(r, 350));
+    await new Promise(r => setTimeout(r, 300));
     showScreen('results');
-
   } catch (err) {
     console.error(err);
     showScreen('main');
@@ -836,17 +437,12 @@ async function generate() {
   }
 }
 
-// ── Bootstrap ────────────────────────────────────
+// ── Boot ──────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  const clientId     = localStorage.getItem('sp_client_id');
-  const clientSecret = localStorage.getItem('sp_client_secret');
-  const geminiKey    = localStorage.getItem('gemini_api_key');
-
-  if (clientId)     document.getElementById('client-id-input').value     = clientId;
-  if (clientSecret) document.getElementById('client-secret-input').value = clientSecret;
-  if (geminiKey)    document.getElementById('gemini-key-input').value     = geminiKey;
-
-  if (clientId && clientSecret && geminiKey) {
+  buildPills();
+  const key = localStorage.getItem('gemini_api_key');
+  if (key) {
+    document.getElementById('gemini-key-input').value = key;
     showScreen('main');
   } else {
     showScreen('setup');
