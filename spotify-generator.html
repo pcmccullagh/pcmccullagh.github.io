@@ -780,31 +780,22 @@ async function fallbackGetTracks(playlistId) {
     tracks = tracks.concat(valid.map(i => i.track));
     url = data.next ? data.next.replace(SP_API, '') : null;
   }
-  // Get audio features for first 100
-  const ids = tracks.slice(0, 100).map(t => t.id);
-  const featData = await spApi('/audio-features?ids=' + ids.join(','));
-  const featMap = {};
-  (featData.audio_features || []).filter(Boolean).forEach(f => { featMap[f.id] = f; });
-
-  return tracks.map(t => {
-    const f = featMap[t.id] || {};
-    return {
-      spotifyUri:      t.uri,
-      trackName:       t.name,
-      artists:         t.artists.map(a => a.name).join(', '),
-      albumName:       t.album?.name || '',
-      durationMs:      t.duration_ms,
-      genres:          '',
-      danceability:    f.danceability || 0,
-      energy:          f.energy || 0,
-      valence:         f.valence || 0,
-      acousticness:    f.acousticness || 0,
-      tempo:           f.tempo || 0,
-      speechiness:     f.speechiness || 0,
-      instrumentalness: f.instrumentalness || 0,
-      popularity:      t.popularity || 0,
-    };
-  });
+  return tracks.map(t => ({
+    spotifyUri:      t.uri,
+    trackName:       t.name,
+    artists:         t.artists.map(a => a.name).join(', '),
+    albumName:       t.album?.name || '',
+    durationMs:      t.duration_ms,
+    genres:          '',
+    danceability:    0,
+    energy:          0,
+    valence:         0,
+    acousticness:    0,
+    tempo:           0,
+    speechiness:     0,
+    instrumentalness: 0,
+    popularity:      t.popularity || 0,
+  }));
 }
 
 // ══════════════════════════════════════════════
