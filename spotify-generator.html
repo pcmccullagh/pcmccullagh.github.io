@@ -8,13 +8,13 @@
     :root {
       --green: #1DB954;
       --green-dark: #17a349;
+      --blue: #4285f4;
       --bg: #121212;
       --surface: #1e1e1e;
       --surface2: #282828;
       --surface3: #333;
       --text: #ffffff;
       --text-muted: #b3b3b3;
-      --red: #e74c3c;
       --radius: 12px;
     }
 
@@ -28,7 +28,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Layout ── */
     .screen {
       display: none;
       flex-direction: column;
@@ -39,14 +38,12 @@
     }
     .screen.active { display: flex; }
 
-    /* ── Header ── */
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-bottom: 8px;
     }
-    .logo svg { flex-shrink: 0; }
     .logo-text {
       font-size: 13px;
       font-weight: 700;
@@ -55,29 +52,28 @@
       color: var(--text-muted);
     }
 
-    /* ── Hero ── */
     .hero {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 32px 0;
+      padding: 24px 0;
     }
     .hero h1 {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
       line-height: 1.15;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
-    .hero h1 span { color: var(--green); }
+    .hero h1 .sp { color: var(--green); }
+    .hero h1 .gm { color: var(--blue); }
     .hero p {
       color: var(--text-muted);
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1.6;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
-    /* ── Buttons ── */
     .btn {
       display: flex;
       align-items: center;
@@ -92,7 +88,6 @@
       cursor: pointer;
       transition: transform 0.1s, opacity 0.2s, background 0.2s;
       -webkit-tap-highlight-color: transparent;
-      letter-spacing: 0.3px;
     }
     .btn:active { transform: scale(0.97); }
     .btn-green { background: var(--green); color: #000; }
@@ -105,28 +100,28 @@
     .btn-outline:hover { border-color: var(--text-muted); }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* ── Setup screen ── */
+    /* Setup card */
     .setup-card {
       background: var(--surface);
       border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
     }
     .setup-step {
       display: flex;
       gap: 14px;
       align-items: flex-start;
-      padding: 12px 0;
+      padding: 11px 0;
       border-bottom: 1px solid var(--surface2);
     }
     .setup-step:last-child { border-bottom: none; padding-bottom: 0; }
     .step-num {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       background: var(--green);
       color: #000;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       display: flex;
       align-items: center;
@@ -134,28 +129,29 @@
       flex-shrink: 0;
       margin-top: 2px;
     }
-    .step-text { font-size: 14px; line-height: 1.5; color: var(--text-muted); }
+    .step-num.blue { background: var(--blue); color: #fff; }
+    .step-text { font-size: 13.5px; line-height: 1.5; color: var(--text-muted); }
     .step-text strong { color: var(--text); }
     .step-text a { color: var(--green); text-decoration: none; }
+    .step-text a.blue-link { color: #7baaf7; }
     .step-text code {
       background: var(--surface2);
       padding: 2px 6px;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-family: monospace;
       word-break: break-all;
     }
 
-    /* ── Inputs ── */
-    .field { margin-bottom: 16px; }
+    .field { margin-bottom: 14px; }
     .field label {
       display: block;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.8px;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
     .field input, .field select {
       width: 100%;
@@ -164,38 +160,37 @@
       border-radius: 8px;
       color: var(--text);
       font-size: 15px;
-      padding: 13px 14px;
+      padding: 12px 14px;
       outline: none;
       transition: border-color 0.2s;
     }
-    .field input:focus, .field select:focus {
-      border-color: var(--green);
-    }
-    .field input::placeholder { color: var(--surface3); }
+    .field input:focus, .field select:focus { border-color: var(--green); }
+    .field input::placeholder { color: #555; }
 
-    /* ── Progress ── */
+    /* Progress */
     .progress-wrap {
       background: var(--surface2);
       border-radius: 4px;
       overflow: hidden;
       height: 4px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      width: 100%;
     }
     .progress-bar {
       height: 100%;
-      background: var(--green);
+      background: linear-gradient(90deg, var(--green), var(--blue));
       border-radius: 4px;
-      transition: width 0.4s ease;
+      transition: width 0.5s ease;
       width: 0%;
     }
     .progress-label {
       font-size: 13px;
       color: var(--text-muted);
-      margin-bottom: 24px;
-      min-height: 20px;
+      margin-bottom: 8px;
+      min-height: 18px;
+      text-align: center;
     }
 
-    /* ── Loading spinner ── */
     .spinner {
       width: 48px;
       height: 48px;
@@ -203,48 +198,70 @@
       border-top-color: var(--green);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
-      margin: 40px auto;
+      margin: 32px auto 24px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Track list ── */
+    /* Source badge row */
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--surface2);
+      border-radius: 50px;
+      padding: 4px 10px 4px 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .badge .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .badge .dot.green { background: var(--green); }
+    .badge .dot.blue { background: var(--blue); }
+
+    /* Track list */
     .section-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 1px;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 12px;
-      margin-top: 24px;
+      margin-bottom: 10px;
+      margin-top: 22px;
     }
-
     .track-list { list-style: none; }
     .track-item {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 0;
+      padding: 9px 0;
       border-bottom: 1px solid var(--surface2);
     }
     .track-item:last-child { border-bottom: none; }
     .track-num {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
-      width: 22px;
+      width: 20px;
       text-align: right;
       flex-shrink: 0;
     }
     .track-art {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       border-radius: 4px;
       object-fit: cover;
       background: var(--surface3);
       flex-shrink: 0;
     }
     .track-art-placeholder {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       border-radius: 4px;
       background: var(--surface3);
       display: flex;
@@ -252,6 +269,7 @@
       justify-content: center;
       flex-shrink: 0;
     }
+    .track-item.not-found .track-art-placeholder { background: #1a1a1a; border: 1px dashed var(--surface3); }
     .track-info { flex: 1; min-width: 0; }
     .track-name {
       font-size: 14px;
@@ -260,6 +278,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .track-item.not-found .track-name { color: var(--text-muted); }
     .track-artist {
       font-size: 12px;
       color: var(--text-muted);
@@ -268,71 +287,74 @@
       text-overflow: ellipsis;
       margin-top: 2px;
     }
-    .track-duration {
-      font-size: 12px;
-      color: var(--text-muted);
+    .track-duration { font-size: 12px; color: var(--text-muted); flex-shrink: 0; }
+    .not-found-badge {
+      font-size: 10px;
+      color: #666;
+      background: var(--surface2);
+      border-radius: 4px;
+      padding: 2px 6px;
       flex-shrink: 0;
     }
 
-    /* ── Playlist header card ── */
+    /* Playlist header card */
     .playlist-card {
       background: var(--surface);
       border-radius: var(--radius);
-      padding: 16px;
+      padding: 14px;
       display: flex;
       gap: 14px;
       align-items: center;
-      margin-bottom: 4px;
     }
     .playlist-art {
-      width: 72px;
-      height: 72px;
+      width: 68px; height: 68px;
       border-radius: 8px;
       object-fit: cover;
       background: var(--surface3);
       flex-shrink: 0;
     }
-    .playlist-info h2 {
-      font-size: 18px;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 4px;
-    }
-    .playlist-info p {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
+    .playlist-info h2 { font-size: 17px; font-weight: 800; line-height: 1.2; margin-bottom: 4px; }
+    .playlist-info p { font-size: 13px; color: var(--text-muted); }
 
-    /* ── Vibe tags ── */
-    .vibe-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 16px 0;
-    }
+    /* Vibe tags */
+    .vibe-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0; }
     .vibe-tag {
-      background: var(--surface2);
-      color: var(--green);
       border-radius: 50px;
-      padding: 5px 12px;
+      padding: 4px 11px;
       font-size: 12px;
       font-weight: 600;
     }
+    .vibe-tag.genre { background: var(--surface2); color: var(--green); }
+    .vibe-tag.mood { background: var(--surface2); color: #7baaf7; }
 
-    /* ── Error banner ── */
+    /* Gemini note */
+    .gemini-note {
+      background: rgba(66, 133, 244, 0.08);
+      border: 1px solid rgba(66, 133, 244, 0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #7baaf7;
+      margin-bottom: 4px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    /* Error */
     .error-banner {
-      background: rgba(231, 76, 60, 0.15);
-      border: 1px solid rgba(231, 76, 60, 0.4);
+      background: rgba(231, 76, 60, 0.12);
+      border: 1px solid rgba(231, 76, 60, 0.35);
       border-radius: 8px;
       padding: 12px 16px;
-      font-size: 14px;
-      color: #ff6b6b;
-      margin-bottom: 16px;
+      font-size: 13.5px;
+      color: #ff7070;
+      margin-bottom: 14px;
       display: none;
     }
     .error-banner.visible { display: block; }
 
-    /* ── Toast ── */
+    /* Toast */
     .toast {
       position: fixed;
       bottom: 24px;
@@ -350,45 +372,30 @@
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* ── Misc ── */
-    .divider { height: 1px; background: var(--surface2); margin: 20px 0; }
+    .divider { height: 1px; background: var(--surface2); margin: 18px 0; }
     .text-center { text-align: center; }
     .text-muted { color: var(--text-muted); font-size: 13px; }
-    .mt-auto { margin-top: auto; }
-    .mb-16 { margin-bottom: 16px; }
-    .mb-8 { margin-bottom: 8px; }
-    .gap-12 { display: flex; flex-direction: column; gap: 12px; }
+    .gap-10 { display: flex; flex-direction: column; gap: 10px; }
 
     .back-btn {
-      background: none;
-      border: none;
+      background: none; border: none;
       color: var(--text-muted);
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0;
-      margin-bottom: 24px;
+      font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      padding: 0; margin-bottom: 20px;
     }
     .back-btn:hover { color: var(--text); }
 
     .scrollable { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
-    /* Sticky bottom actions */
     .sticky-bottom {
       position: sticky;
       bottom: 0;
       background: linear-gradient(transparent, var(--bg) 30%);
-      padding: 16px 0 24px;
+      padding: 14px 0 24px;
       margin-top: 8px;
     }
-
-    .result-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .result-actions { display: flex; flex-direction: column; gap: 10px; }
   </style>
 </head>
 <body>
@@ -406,8 +413,8 @@
   </div>
 
   <div class="hero">
-    <h1>Generate a playlist with <span>all new songs</span></h1>
-    <p>Drop any Spotify playlist and we'll create a fresh one with the same vibe — zero overlapping tracks.</p>
+    <h1>Powered by <span class="sp">Spotify</span> + <span class="gm">Gemini</span></h1>
+    <p>Paste any Spotify playlist. Exportify reads its song data. Gemini picks the perfect new songs. Zero overlap, same vibe.</p>
 
     <div id="setup-error" class="error-banner"></div>
 
@@ -415,42 +422,53 @@
       <div class="setup-step">
         <div class="step-num">1</div>
         <div class="step-text">
-          Go to <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a> and create a free app.
+          Visit <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a>, create a free app, and copy your <strong>Client ID</strong>.
         </div>
       </div>
       <div class="setup-step">
         <div class="step-num">2</div>
         <div class="step-text">
-          In your app settings, add this exact redirect URI:<br />
+          In your Spotify app settings → <strong>Redirect URIs</strong>, add exactly:<br />
           <code id="redirect-uri-display"></code>
         </div>
       </div>
       <div class="setup-step">
-        <div class="step-num">3</div>
+        <div class="step-num blue">3</div>
         <div class="step-text">
-          Paste your <strong>Client ID</strong> below and click Connect.
+          Visit <a class="blue-link" href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> and create a free <strong>Gemini API key</strong>.
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          Enter both keys below and connect.
         </div>
       </div>
     </div>
 
     <div class="field">
       <label>Spotify Client ID</label>
-      <input id="client-id-input" type="text" placeholder="e.g. 3f2b9a…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+      <input id="client-id-input" type="text" placeholder="e.g. 3f2b9a…"
+        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
     </div>
 
-    <div class="gap-12">
-      <button class="btn btn-green" onclick="startAuth()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-        Connect with Spotify
-      </button>
+    <div class="field">
+      <label>Gemini API Key</label>
+      <input id="gemini-key-input" type="password" placeholder="AIza…"
+        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
     </div>
+
+    <button class="btn btn-green" onclick="startAuth()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+      Connect with Spotify
+    </button>
   </div>
 
-  <p class="text-muted text-center">Your credentials are stored locally and never sent to any server.</p>
+  <p class="text-muted text-center">Keys are stored in your browser only — never sent to any server.</p>
 </div>
 
 <!-- ══════════════════════════════════════════════
-     SCREEN 2: MAIN (enter playlist)
+     SCREEN 2: MAIN
 ═══════════════════════════════════════════════ -->
 <div id="screen-main" class="screen">
   <div class="logo">
@@ -462,8 +480,8 @@
   </div>
 
   <div class="hero">
-    <h1>Paste your <span>Spotify</span> playlist</h1>
-    <p>We'll analyze the vibe and generate a fresh playlist of similar tracks you haven't heard yet.</p>
+    <h1>Paste your <span class="sp">Spotify</span> playlist</h1>
+    <p>Exportify reads every song's genres and audio fingerprint. Gemini then picks fresh songs with the same feel.</p>
 
     <div id="main-error" class="error-banner"></div>
 
@@ -477,17 +495,16 @@
     <div class="field">
       <label>New playlist size</label>
       <select id="playlist-size">
+        <option value="15">15 songs</option>
         <option value="20">20 songs</option>
         <option value="30" selected>30 songs</option>
         <option value="50">50 songs</option>
-        <option value="75">75 songs</option>
-        <option value="100">100 songs</option>
       </select>
     </div>
 
     <button class="btn btn-green" onclick="generate()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
-      Generate New Playlist
+      Generate with Gemini
     </button>
   </div>
 
@@ -501,13 +518,11 @@
      SCREEN 3: LOADING
 ═══════════════════════════════════════════════ -->
 <div id="screen-loading" class="screen">
-  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;">
     <div class="spinner"></div>
-    <h2 style="font-size:20px; margin-bottom:12px; text-align:center;">Generating your playlist…</h2>
-    <div class="progress-wrap" style="width:100%">
-      <div id="progress-bar" class="progress-bar"></div>
-    </div>
-    <p id="progress-label" class="progress-label text-center">Fetching original playlist…</p>
+    <h2 style="font-size:19px;margin-bottom:16px;text-align:center;">Working on it…</h2>
+    <div class="progress-wrap"><div id="progress-bar" class="progress-bar"></div></div>
+    <p id="progress-label" class="progress-label">Starting…</p>
   </div>
 </div>
 
@@ -524,11 +539,20 @@
     <div class="section-title">Original Playlist</div>
     <div id="source-playlist-card" class="playlist-card"></div>
 
+    <div class="badge-row" style="margin-top:14px">
+      <span class="badge"><span class="dot green"></span>Exportify data</span>
+      <span class="badge"><span class="dot blue"></span>Gemini recommendations</span>
+    </div>
+
     <div class="section-title">Detected Vibe</div>
     <div id="vibe-tags" class="vibe-tags"></div>
 
     <div class="section-title">Your New Playlist (<span id="result-count">0</span> songs)</div>
     <div id="result-error" class="error-banner"></div>
+    <div id="gemini-note" class="gemini-note" style="display:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;margin-top:1px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      <span id="gemini-note-text"></span>
+    </div>
     <ul id="result-track-list" class="track-list"></ul>
 
     <div class="sticky-bottom">
@@ -546,12 +570,11 @@
   </div>
 </div>
 
-<!-- Toast notification -->
 <div id="toast" class="toast"></div>
 
 <script>
 // ══════════════════════════════════════════════
-//  Constants & State
+//  Constants
 // ══════════════════════════════════════════════
 const SCOPES = [
   'playlist-read-private',
@@ -563,18 +586,18 @@ const SCOPES = [
 ].join(' ');
 
 const REDIRECT_URI = window.location.origin + window.location.pathname;
-const API = 'https://api.spotify.com/v1';
+const SP_API = 'https://api.spotify.com/v1';
+const GEMINI_MODEL = 'gemini-2.0-flash';
 
-let state = {
-  accessToken: null,
+let appState = {
   userId: null,
   sourcePlaylist: null,
-  generatedTracks: [],
-  audioFeaturesSummary: null,
+  generatedTracks: [],   // Spotify track objects (found ones)
+  allRecommended: [],    // raw Gemini output [{title,artist}]
 };
 
 // ══════════════════════════════════════════════
-//  Screens
+//  Screen management
 // ══════════════════════════════════════════════
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -585,88 +608,67 @@ function showScreen(id) {
 // ══════════════════════════════════════════════
 //  PKCE helpers
 // ══════════════════════════════════════════════
-function base64urlEncode(buffer) {
-  return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+function b64url(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf)))
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
-
-async function generateCodeVerifier() {
-  const array = crypto.getRandomValues(new Uint8Array(64));
-  return base64urlEncode(array);
-}
-
-async function generateCodeChallenge(verifier) {
-  const data = new TextEncoder().encode(verifier);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return base64urlEncode(digest);
+async function codeVerifier() { return b64url(crypto.getRandomValues(new Uint8Array(64))); }
+async function codeChallenge(v) {
+  return b64url(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v)));
 }
 
 // ══════════════════════════════════════════════
-//  Auth
+//  Spotify Auth (PKCE)
 // ══════════════════════════════════════════════
 async function startAuth() {
   const clientId = document.getElementById('client-id-input').value.trim();
-  if (!clientId) {
-    showError('setup-error', 'Please enter your Spotify Client ID.');
-    return;
-  }
-
-  localStorage.setItem('sp_client_id', clientId);
+  const geminiKey = document.getElementById('gemini-key-input').value.trim();
   clearError('setup-error');
 
-  const verifier = await generateCodeVerifier();
-  const challenge = await generateCodeChallenge(verifier);
-  const stateParam = base64urlEncode(crypto.getRandomValues(new Uint8Array(16)));
+  if (!clientId) { showError('setup-error', 'Please enter your Spotify Client ID.'); return; }
+  if (!geminiKey) { showError('setup-error', 'Please enter your Gemini API Key.'); return; }
 
+  localStorage.setItem('sp_client_id', clientId);
+  localStorage.setItem('gemini_api_key', geminiKey);
+
+  const verifier = await codeVerifier();
+  const challenge = await codeChallenge(verifier);
+  const st = b64url(crypto.getRandomValues(new Uint8Array(16)));
   sessionStorage.setItem('sp_verifier', verifier);
-  sessionStorage.setItem('sp_state', stateParam);
+  sessionStorage.setItem('sp_state', st);
 
-  const params = new URLSearchParams({
-    client_id: clientId,
-    response_type: 'code',
-    redirect_uri: REDIRECT_URI,
-    scope: SCOPES,
-    state: stateParam,
-    code_challenge_method: 'S256',
-    code_challenge: challenge,
+  const p = new URLSearchParams({
+    client_id: clientId, response_type: 'code', redirect_uri: REDIRECT_URI,
+    scope: SCOPES, state: st, code_challenge_method: 'S256', code_challenge: challenge,
   });
-
-  window.location.href = 'https://accounts.spotify.com/authorize?' + params;
+  window.location.href = 'https://accounts.spotify.com/authorize?' + p;
 }
 
 async function exchangeCode(code) {
-  const verifier = sessionStorage.getItem('sp_verifier');
-  const clientId = localStorage.getItem('sp_client_id');
-
   const res = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      client_id: clientId,
+      client_id: localStorage.getItem('sp_client_id'),
       grant_type: 'authorization_code',
-      code,
-      redirect_uri: REDIRECT_URI,
-      code_verifier: verifier,
+      code, redirect_uri: REDIRECT_URI,
+      code_verifier: sessionStorage.getItem('sp_verifier'),
     }),
   });
-
-  if (!res.ok) throw new Error('Token exchange failed: ' + (await res.text()));
-  const data = await res.json();
-  return data;
+  if (!res.ok) throw new Error('Token exchange failed');
+  return res.json();
 }
 
-async function refreshToken(token) {
-  const clientId = localStorage.getItem('sp_client_id');
+async function doRefresh(refreshTok) {
   const res = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      grant_type: 'refresh_token',
-      refresh_token: token,
-      client_id: clientId,
+      grant_type: 'refresh_token', refresh_token: refreshTok,
+      client_id: localStorage.getItem('sp_client_id'),
     }),
   });
-  if (!res.ok) throw new Error('Refresh failed');
+  if (!res.ok) throw new Error('Token refresh failed');
   return res.json();
 }
 
@@ -677,158 +679,282 @@ function saveTokens(data) {
 }
 
 async function getToken() {
-  const expires = parseInt(localStorage.getItem('sp_token_expires') || '0');
-  if (Date.now() < expires - 30000) {
+  if (Date.now() < parseInt(localStorage.getItem('sp_token_expires') || 0) - 30000) {
     return localStorage.getItem('sp_access_token');
   }
-  const refresh = localStorage.getItem('sp_refresh_token');
-  if (!refresh) return null;
-  const data = await refreshToken(refresh);
+  const rt = localStorage.getItem('sp_refresh_token');
+  if (!rt) return null;
+  const data = await doRefresh(rt);
   saveTokens(data);
   return data.access_token;
 }
 
 function logout() {
   ['sp_access_token', 'sp_refresh_token', 'sp_token_expires'].forEach(k => localStorage.removeItem(k));
-  state.accessToken = null;
-  state.userId = null;
   showScreen('setup');
 }
 
 // ══════════════════════════════════════════════
-//  Spotify API helpers
+//  Spotify API wrapper
 // ══════════════════════════════════════════════
-async function api(path, opts = {}) {
+async function spApi(path, opts = {}) {
   const token = await getToken();
   if (!token) throw new Error('Not authenticated');
-  const res = await fetch(API + path, {
+  const res = await fetch(SP_API + path, {
     ...opts,
-    headers: {
-      Authorization: 'Bearer ' + token,
-      'Content-Type': 'application/json',
-      ...(opts.headers || {}),
-    },
+    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', ...(opts.headers || {}) },
   });
-  if (res.status === 401) {
-    logout();
-    throw new Error('Session expired. Please reconnect.');
-  }
+  if (res.status === 401) { logout(); throw new Error('Session expired — please reconnect.'); }
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `API error ${res.status}`);
+    const e = await res.json().catch(() => ({}));
+    throw new Error(e.error?.message || `Spotify API error ${res.status}`);
   }
   if (res.status === 204) return null;
   return res.json();
 }
 
-async function getMe() {
-  return api('/me');
-}
-
-// Fetch ALL tracks from a playlist (handles pagination)
-async function getAllPlaylistTracks(playlistId) {
-  let tracks = [];
-  let url = `/playlists/${playlistId}/tracks?limit=50&fields=next,items(track(id,name,artists,album,duration_ms,uri))`;
-  while (url) {
-    const data = await api(url);
-    const valid = (data.items || []).filter(i => i.track && i.track.id);
-    tracks = tracks.concat(valid.map(i => i.track));
-    url = data.next ? data.next.replace(API, '') : null;
-  }
-  return tracks;
-}
-
-// Fetch audio features in batches of 100
-async function getAudioFeatures(trackIds) {
-  const features = [];
-  for (let i = 0; i < trackIds.length; i += 100) {
-    const batch = trackIds.slice(i, i + 100);
-    const data = await api('/audio-features?ids=' + batch.join(','));
-    features.push(...(data.audio_features || []).filter(Boolean));
-  }
-  return features;
-}
-
-function avg(arr) { return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0; }
-function clamp(v, min, max) { return Math.min(max, Math.max(min, v)); }
-
-function summarizeFeatures(features) {
-  const keys = ['danceability','energy','valence','acousticness','instrumentalness','speechiness','tempo'];
-  const summary = {};
-  keys.forEach(k => {
-    summary[k] = avg(features.map(f => f[k]).filter(v => v !== undefined));
+// ══════════════════════════════════════════════
+//  Exportify — fetch rich CSV playlist data
+// ══════════════════════════════════════════════
+async function fetchFromExportify(playlistId) {
+  const token = await getToken();
+  const res = await fetch(`https://exportify.net/api/playlists/${playlistId}/tracks`, {
+    headers: { Authorization: 'Bearer ' + token },
   });
-  return summary;
+  if (!res.ok) throw new Error(`Exportify responded with ${res.status}`);
+  return res.text();
 }
 
-function vibeLabels(summary) {
+// Proper CSV parser (handles quoted fields with commas/newlines)
+function parseCSV(csv) {
+  const rows = [];
+  let field = '', row = [], inQuotes = false;
+  for (let i = 0; i < csv.length; i++) {
+    const ch = csv[i], next = csv[i + 1];
+    if (inQuotes) {
+      if (ch === '"' && next === '"') { field += '"'; i++; }
+      else if (ch === '"') { inQuotes = false; }
+      else { field += ch; }
+    } else {
+      if (ch === '"') { inQuotes = true; }
+      else if (ch === ',') { row.push(field); field = ''; }
+      else if (ch === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+      else if (ch === '\r') { /* skip */ }
+      else { field += ch; }
+    }
+  }
+  if (field || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+function exportifyCSVToTracks(csv) {
+  const rows = parseCSV(csv.trim());
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.trim());
+  const idx = h => headers.indexOf(h);
+
+  return rows.slice(1).map(row => ({
+    spotifyUri:      row[idx('Spotify URI')] || '',
+    trackName:       row[idx('Track Name')] || '',
+    artists:         row[idx('Artist Name(s)')] || '',
+    albumName:       row[idx('Album Name')] || '',
+    durationMs:      parseInt(row[idx('Track Duration (ms)')]) || 0,
+    genres:          row[idx('Genres')] || '',
+    danceability:    parseFloat(row[idx('Danceability')]) || 0,
+    energy:          parseFloat(row[idx('Energy')]) || 0,
+    valence:         parseFloat(row[idx('Valence')]) || 0,
+    acousticness:    parseFloat(row[idx('Acousticness')]) || 0,
+    tempo:           parseFloat(row[idx('Tempo')]) || 0,
+    speechiness:     parseFloat(row[idx('Speechiness')]) || 0,
+    instrumentalness: parseFloat(row[idx('Instrumentalness')]) || 0,
+    popularity:      parseInt(row[idx('Popularity')]) || 0,
+  })).filter(t => t.trackName);
+}
+
+// Fallback: get tracks + audio features directly from Spotify
+async function fallbackGetTracks(playlistId) {
+  let tracks = [], url = `/playlists/${playlistId}/tracks?limit=50&fields=next,items(track(id,name,artists,album,duration_ms,uri))`;
+  while (url) {
+    const data = await spApi(url);
+    const valid = (data.items || []).filter(i => i.track?.id);
+    tracks = tracks.concat(valid.map(i => i.track));
+    url = data.next ? data.next.replace(SP_API, '') : null;
+  }
+  // Get audio features for first 100
+  const ids = tracks.slice(0, 100).map(t => t.id);
+  const featData = await spApi('/audio-features?ids=' + ids.join(','));
+  const featMap = {};
+  (featData.audio_features || []).filter(Boolean).forEach(f => { featMap[f.id] = f; });
+
+  return tracks.map(t => {
+    const f = featMap[t.id] || {};
+    return {
+      spotifyUri:      t.uri,
+      trackName:       t.name,
+      artists:         t.artists.map(a => a.name).join(', '),
+      albumName:       t.album?.name || '',
+      durationMs:      t.duration_ms,
+      genres:          '',
+      danceability:    f.danceability || 0,
+      energy:          f.energy || 0,
+      valence:         f.valence || 0,
+      acousticness:    f.acousticness || 0,
+      tempo:           f.tempo || 0,
+      speechiness:     f.speechiness || 0,
+      instrumentalness: f.instrumentalness || 0,
+      popularity:      t.popularity || 0,
+    };
+  });
+}
+
+// ══════════════════════════════════════════════
+//  Song analysis helpers
+// ══════════════════════════════════════════════
+function avg(arr) { return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0; }
+
+function topGenres(tracks, n = 6) {
+  const counts = {};
+  tracks.forEach(t => {
+    if (!t.genres) return;
+    t.genres.split(',').forEach(g => {
+      g = g.trim().toLowerCase();
+      if (g) counts[g] = (counts[g] || 0) + 1;
+    });
+  });
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, n)
+    .map(([g]) => g);
+}
+
+function moodLabels(tracks) {
   const labels = [];
-  if (summary.energy > 0.7) labels.push('High Energy');
-  else if (summary.energy < 0.4) labels.push('Chill');
-  if (summary.danceability > 0.7) labels.push('Danceable');
-  if (summary.valence > 0.7) labels.push('Happy');
-  else if (summary.valence < 0.35) labels.push('Melancholic');
-  if (summary.acousticness > 0.6) labels.push('Acoustic');
-  if (summary.instrumentalness > 0.5) labels.push('Instrumental');
-  if (summary.speechiness > 0.33) labels.push('Wordy');
-  if (summary.tempo > 130) labels.push('Fast Tempo');
-  else if (summary.tempo < 90) labels.push('Slow Tempo');
-  if (labels.length === 0) labels.push('Balanced');
+  const e = avg(tracks.map(t => t.energy));
+  const d = avg(tracks.map(t => t.danceability));
+  const v = avg(tracks.map(t => t.valence));
+  const ac = avg(tracks.map(t => t.acousticness));
+  const ins = avg(tracks.map(t => t.instrumentalness));
+  const bpm = avg(tracks.map(t => t.tempo));
+  if (e > 0.7) labels.push('High Energy');
+  else if (e < 0.4) labels.push('Chill');
+  if (d > 0.7) labels.push('Danceable');
+  if (v > 0.7) labels.push('Upbeat');
+  else if (v < 0.35) labels.push('Melancholic');
+  if (ac > 0.6) labels.push('Acoustic');
+  if (ins > 0.5) labels.push('Instrumental');
+  if (bpm > 130) labels.push('Fast Tempo');
+  else if (bpm < 85) labels.push('Slow Tempo');
   return labels;
 }
 
-// Pick up to 5 diverse seed tracks
-function pickSeeds(tracks) {
-  if (tracks.length <= 5) return tracks.map(t => t.id);
-  // Spread across the playlist to capture diversity
-  const step = Math.floor(tracks.length / 5);
-  return [0, step, step * 2, step * 3, step * 4].map(i => tracks[i].id);
-}
+// ══════════════════════════════════════════════
+//  Gemini recommendations
+// ══════════════════════════════════════════════
+async function askGemini(tracks, playlistName, desiredCount) {
+  const apiKey = localStorage.getItem('gemini_api_key');
+  if (!apiKey) throw new Error('Gemini API key not found. Please reconnect.');
 
-async function getRecommendations(seedTrackIds, summary, limit, excludeIds) {
-  const exclude = new Set(excludeIds);
-  let collected = [];
-  let attempts = 0;
-  const maxAttempts = 6;
+  // Build a concise song list for the prompt (cap at 60 songs to keep tokens reasonable)
+  const sample = tracks.slice(0, 60);
+  const songList = sample.map((t, i) => {
+    const genres = t.genres ? ` | Genres: ${t.genres.split(',').slice(0,3).map(g=>g.trim()).join(', ')}` : '';
+    const features = [
+      t.energy      ? `Energy: ${t.energy.toFixed(2)}` : '',
+      t.danceability ? `Dance: ${t.danceability.toFixed(2)}` : '',
+      t.valence      ? `Mood: ${t.valence.toFixed(2)}` : '',
+      t.tempo        ? `${Math.round(t.tempo)} BPM` : '',
+    ].filter(Boolean).join(' | ');
+    return `${i + 1}. "${t.trackName}" by ${t.artists}${genres}${features ? ' | ' + features : ''}`;
+  }).join('\n');
 
-  // We may need multiple calls using different seed combinations to avoid duplicates
-  // and reach the desired limit
-  const allSeeds = seedTrackIds;
+  const avoidList = tracks.map(t => `"${t.trackName}" by ${t.artists}`).join('; ');
 
-  while (collected.length < limit && attempts < maxAttempts) {
-    attempts++;
-    const seedsForCall = allSeeds.slice(0, 5);
-    const remaining = limit - collected.length;
+  const prompt = `You are an expert music curator. Analyze this Spotify playlist and recommend ${desiredCount} songs with a very similar vibe.
 
-    const params = new URLSearchParams({
-      seed_tracks: seedsForCall.join(','),
-      limit: Math.min(100, remaining + 20), // ask for a few extra to account for filtering
-      target_danceability: summary.danceability.toFixed(3),
-      target_energy: summary.energy.toFixed(3),
-      target_valence: summary.valence.toFixed(3),
-      target_acousticness: summary.acousticness.toFixed(3),
-      target_tempo: summary.tempo.toFixed(1),
-    });
+Playlist name: "${playlistName}"
 
-    const data = await api('/recommendations?' + params);
-    const fresh = (data.tracks || []).filter(t => !exclude.has(t.id) && !collected.some(c => c.id === t.id));
-    collected = collected.concat(fresh);
+Songs in this playlist:
+${songList}
 
-    if (data.tracks && data.tracks.length === 0) break; // Spotify has nothing more to offer
+Your task:
+- Recommend exactly ${desiredCount} real, existing songs
+- Do NOT include any song that appears in the playlist above
+- Match the genres, energy level, mood (valence), tempo, and overall feel
+- Include a variety of artists (avoid repeating artists already in the list)
+- All songs must be real and available on Spotify
+
+Songs to strictly avoid (already in playlist): ${avoidList.slice(0, 2000)}
+
+Return ONLY a valid JSON array — no markdown, no explanation, no extra text:
+[{"title": "Song Title", "artist": "Artist Name"}, ...]`;
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.9,
+          maxOutputTokens: 4096,
+        },
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error('Gemini error: ' + (err.error?.message || res.status));
   }
 
-  return collected.slice(0, limit);
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+  // Extract JSON array from response (handle markdown code fences)
+  const jsonMatch = text.match(/\[[\s\S]*\]/);
+  if (!jsonMatch) throw new Error('Gemini returned an unexpected format. Try again.');
+
+  const recs = JSON.parse(jsonMatch[0]);
+  if (!Array.isArray(recs)) throw new Error('Invalid response from Gemini.');
+  return recs.filter(r => r.title && r.artist);
 }
 
+// ══════════════════════════════════════════════
+//  Search Spotify for recommended songs
+// ══════════════════════════════════════════════
+async function searchSpotify(title, artist) {
+  const q = encodeURIComponent(`track:${title} artist:${artist}`);
+  const data = await spApi(`/search?q=${q}&type=track&limit=1`);
+  return data?.tracks?.items?.[0] || null;
+}
+
+async function resolveRecommendations(recs, setProgress, startPct, endPct) {
+  const found = [], notFound = [];
+  for (let i = 0; i < recs.length; i++) {
+    const r = recs[i];
+    const pct = startPct + ((i + 1) / recs.length) * (endPct - startPct);
+    setProgress(Math.round(pct), `Finding "${r.title}" on Spotify… (${i + 1}/${recs.length})`);
+    try {
+      const track = await searchSpotify(r.title, r.artist);
+      if (track) found.push(track);
+      else notFound.push(r);
+    } catch (_) {
+      notFound.push(r);
+    }
+  }
+  return { found, notFound };
+}
+
+// ══════════════════════════════════════════════
+//  Parsing helpers
+// ══════════════════════════════════════════════
 function parsePlaylistId(input) {
   input = input.trim();
-  // Full URL: https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M?si=...
-  const urlMatch = input.match(/playlist\/([A-Za-z0-9]+)/);
-  if (urlMatch) return urlMatch[1];
-  // Spotify URI: spotify:playlist:37i9dQZF1DXcBWIGoYBM5M
-  const uriMatch = input.match(/spotify:playlist:([A-Za-z0-9]+)/);
-  if (uriMatch) return uriMatch[1];
-  // Raw ID
+  const urlM = input.match(/playlist\/([A-Za-z0-9]+)/);
+  if (urlM) return urlM[1];
+  const uriM = input.match(/spotify:playlist:([A-Za-z0-9]+)/);
+  if (uriM) return uriM[1];
   if (/^[A-Za-z0-9]{15,30}$/.test(input)) return input;
   return null;
 }
@@ -838,78 +964,92 @@ function msToMin(ms) {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 }
 
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 // ══════════════════════════════════════════════
 //  UI helpers
 // ══════════════════════════════════════════════
 function showError(id, msg) {
   const el = document.getElementById(id);
-  el.textContent = msg;
-  el.classList.add('visible');
+  el.textContent = msg; el.classList.add('visible');
 }
-
 function clearError(id) {
   const el = document.getElementById(id);
-  el.textContent = '';
-  el.classList.remove('visible');
+  el.textContent = ''; el.classList.remove('visible');
 }
-
 function setProgress(pct, label) {
   document.getElementById('progress-bar').style.width = pct + '%';
   document.getElementById('progress-label').textContent = label;
 }
-
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function renderTrackList(tracks) {
-  const list = document.getElementById('result-track-list');
-  list.innerHTML = '';
-  tracks.forEach((track, i) => {
-    const img = track.album?.images?.[0]?.url;
-    const artist = (track.artists || []).map(a => a.name).join(', ');
-    const li = document.createElement('li');
-    li.className = 'track-item';
-    li.innerHTML = `
-      <span class="track-num">${i + 1}</span>
-      ${img
-        ? `<img class="track-art" src="${img}" alt="" loading="lazy" />`
-        : `<div class="track-art-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="#555"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>`
-      }
-      <div class="track-info">
-        <div class="track-name">${escHtml(track.name)}</div>
-        <div class="track-artist">${escHtml(artist)}</div>
-      </div>
-      <span class="track-duration">${msToMin(track.duration_ms)}</span>
-    `;
-    list.appendChild(li);
-  });
-}
-
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
 }
 
 function renderSourceCard(playlist) {
   const img = playlist.images?.[0]?.url;
   const count = playlist.tracks?.total || 0;
   document.getElementById('source-playlist-card').innerHTML = `
-    ${img ? `<img class="playlist-art" src="${img}" alt="" />` : ''}
+    ${img ? `<img class="playlist-art" src="${escHtml(img)}" alt="" />` : ''}
     <div class="playlist-info">
       <h2>${escHtml(playlist.name)}</h2>
       <p>${escHtml(playlist.owner?.display_name || '')} · ${count} songs</p>
-    </div>
-  `;
+    </div>`;
 }
 
-function renderVibeTags(summary) {
-  const labels = vibeLabels(summary);
-  document.getElementById('vibe-tags').innerHTML = labels.map(l =>
-    `<span class="vibe-tag">${l}</span>`
-  ).join('');
+function renderVibeTags(tracks) {
+  const genres = topGenres(tracks);
+  const moods  = moodLabels(tracks);
+  const tags   = [
+    ...genres.map(g => `<span class="vibe-tag genre">${escHtml(g)}</span>`),
+    ...moods.map(m => `<span class="vibe-tag mood">${escHtml(m)}</span>`),
+  ];
+  document.getElementById('vibe-tags').innerHTML = tags.length
+    ? tags.join('')
+    : '<span class="vibe-tag mood">Balanced</span>';
+}
+
+function renderTrackList(found, notFound) {
+  const list = document.getElementById('result-track-list');
+  list.innerHTML = '';
+
+  found.forEach((track, i) => {
+    const img = track.album?.images?.[0]?.url;
+    const artist = track.artists.map(a => a.name).join(', ');
+    const li = document.createElement('li');
+    li.className = 'track-item';
+    li.innerHTML = `
+      <span class="track-num">${i + 1}</span>
+      ${img
+        ? `<img class="track-art" src="${escHtml(img)}" alt="" loading="lazy" />`
+        : `<div class="track-art-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="#555"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>`}
+      <div class="track-info">
+        <div class="track-name">${escHtml(track.name)}</div>
+        <div class="track-artist">${escHtml(artist)}</div>
+      </div>
+      <span class="track-duration">${msToMin(track.duration_ms)}</span>`;
+    list.appendChild(li);
+  });
+
+  // Show not-found songs as greyed-out entries
+  notFound.forEach((r, i) => {
+    const li = document.createElement('li');
+    li.className = 'track-item not-found';
+    li.innerHTML = `
+      <span class="track-num">${found.length + i + 1}</span>
+      <div class="track-art-placeholder">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#444"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      </div>
+      <div class="track-info">
+        <div class="track-name">${escHtml(r.title)}</div>
+        <div class="track-artist">${escHtml(r.artist)}</div>
+      </div>
+      <span class="not-found-badge">not found</span>`;
+    list.appendChild(li);
+  });
 }
 
 // ══════════════════════════════════════════════
@@ -928,51 +1068,74 @@ async function generate() {
   }
 
   showScreen('loading');
-  setProgress(5, 'Fetching playlist details…');
+  setProgress(5, 'Fetching playlist…');
 
   try {
-    // 1. Get playlist metadata
-    const playlist = await api(`/playlists/${playlistId}?fields=id,name,images,owner,tracks(total)`);
-    state.sourcePlaylist = playlist;
+    // 1. Playlist metadata
+    const playlist = await spApi(`/playlists/${playlistId}?fields=id,name,images,owner,tracks(total)`);
+    appState.sourcePlaylist = playlist;
     renderSourceCard(playlist);
-    setProgress(20, `Found "${playlist.name}" — loading tracks…`);
+    setProgress(12, `Found "${playlist.name}" — reading song data via Exportify…`);
 
-    // 2. Get all tracks
-    const tracks = await getAllPlaylistTracks(playlistId);
+    // 2. Try Exportify for rich CSV; fall back to direct Spotify API
+    let tracks;
+    let usedExportify = true;
+    try {
+      const csv = await fetchFromExportify(playlistId);
+      tracks = exportifyCSVToTracks(csv);
+      if (tracks.length === 0) throw new Error('Empty CSV from Exportify');
+    } catch (exportifyErr) {
+      console.warn('Exportify failed, falling back to Spotify API:', exportifyErr);
+      usedExportify = false;
+      setProgress(15, 'Exportify unavailable — using Spotify API directly…');
+      tracks = await fallbackGetTracks(playlistId);
+    }
+
     if (tracks.length === 0) throw new Error('This playlist appears to be empty.');
-    setProgress(40, `Analyzing ${tracks.length} tracks…`);
+    setProgress(35, `Analysed ${tracks.length} songs via ${usedExportify ? 'Exportify' : 'Spotify'}. Detecting vibe…`);
 
-    // 3. Audio features
-    const trackIds = tracks.map(t => t.id);
-    const features = await getAudioFeatures(trackIds.slice(0, 100)); // analyze up to 100
-    const summary = summarizeFeatures(features.filter(Boolean));
-    state.audioFeaturesSummary = summary;
-    renderVibeTags(summary);
-    setProgress(65, 'Finding similar songs…');
+    renderVibeTags(tracks);
+    setProgress(42, 'Asking Gemini for recommendations…');
 
-    // 4. Pick seed tracks & get recommendations
-    const seeds = pickSeeds(tracks);
-    const recs = await getRecommendations(seeds, summary, desiredSize, trackIds);
+    // 3. Ask Gemini
+    const geminiRecs = await askGemini(tracks, playlist.name, desiredSize);
+    appState.allRecommended = geminiRecs;
+    setProgress(65, `Gemini suggested ${geminiRecs.length} songs. Looking them up on Spotify…`);
 
-    if (recs.length === 0) throw new Error("Spotify couldn't find recommendations. Try a different playlist.");
-    state.generatedTracks = recs;
+    // 4. Resolve each recommendation against Spotify search
+    const { found, notFound } = await resolveRecommendations(
+      geminiRecs, setProgress, 65, 95
+    );
+    appState.generatedTracks = found;
 
-    setProgress(90, 'Building your playlist…');
-    renderTrackList(recs);
-    document.getElementById('result-count').textContent = recs.length;
+    // Render
+    renderTrackList(found, notFound);
+    document.getElementById('result-count').textContent = found.length + notFound.length;
+
+    const noteEl = document.getElementById('gemini-note');
+    const noteText = document.getElementById('gemini-note-text');
+    if (notFound.length > 0) {
+      noteText.textContent = `${notFound.length} Gemini suggestion${notFound.length > 1 ? 's' : ''} couldn't be found on Spotify (shown greyed out below) — they won't be saved.`;
+      noteEl.style.display = 'flex';
+    } else {
+      noteEl.style.display = 'none';
+    }
+
+    if (!usedExportify) {
+      showError('result-error',
+        'Note: Exportify was unreachable (CORS), so genre data was not available. Gemini still used audio features to recommend songs.'
+      );
+      document.getElementById('result-error').classList.add('visible');
+    }
 
     setProgress(100, 'Done!');
-    await new Promise(r => setTimeout(r, 400));
+    await new Promise(r => setTimeout(r, 350));
     showScreen('results');
 
   } catch (err) {
-    if (document.getElementById('screen-results').classList.contains('active')) {
-      showError('result-error', err.message);
-    } else {
-      showScreen('main');
-      showError('main-error', err.message);
-    }
     console.error(err);
+    showScreen('main');
+    showError('main-error', err.message);
   }
 }
 
@@ -986,29 +1149,27 @@ async function savePlaylist() {
   clearError('result-error');
 
   try {
-    const name = `${state.sourcePlaylist.name} — New Vibe`;
-    const desc = `Generated by Spotify Playlist Generator · Similar vibes to "${state.sourcePlaylist.name}" with all new songs.`;
+    const name = `${appState.sourcePlaylist.name} — Gemini Remix`;
+    const desc = `Generated by Spotify Playlist Generator using Gemini AI. Similar vibe to "${appState.sourcePlaylist.name}" — all new songs.`;
 
-    // Create playlist
-    const newPlaylist = await api(`/users/${state.userId}/playlists`, {
+    const newPl = await spApi(`/users/${appState.userId}/playlists`, {
       method: 'POST',
       body: JSON.stringify({ name, description: desc, public: false }),
     });
 
-    // Add tracks in batches of 100
-    const uris = state.generatedTracks.map(t => t.uri);
+    const uris = appState.generatedTracks.map(t => t.uri);
     for (let i = 0; i < uris.length; i += 100) {
-      await api(`/playlists/${newPlaylist.id}/tracks`, {
+      await spApi(`/playlists/${newPl.id}/tracks`, {
         method: 'POST',
         body: JSON.stringify({ uris: uris.slice(i, i + 100) }),
       });
     }
 
-    showToast('Playlist saved to your Spotify! 🎉');
-    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Saved to Spotify`;
+    showToast('Saved to your Spotify!');
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Saved!`;
 
   } catch (err) {
-    showError('result-error', 'Failed to save: ' + err.message);
+    showError('result-error', 'Save failed: ' + err.message);
     btn.disabled = false;
     btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg> Save to Spotify`;
   }
@@ -1018,55 +1179,42 @@ async function savePlaylist() {
 //  Bootstrap
 // ══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
-  // Show the redirect URI in setup instructions
   document.getElementById('redirect-uri-display').textContent = REDIRECT_URI;
 
-  // Pre-fill stored client ID
-  const storedId = localStorage.getItem('sp_client_id');
-  if (storedId) document.getElementById('client-id-input').value = storedId;
+  // Pre-fill saved keys
+  const savedClientId = localStorage.getItem('sp_client_id');
+  const savedGeminiKey = localStorage.getItem('gemini_api_key');
+  if (savedClientId) document.getElementById('client-id-input').value = savedClientId;
+  if (savedGeminiKey) document.getElementById('gemini-key-input').value = savedGeminiKey;
 
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code');
   const returnedState = params.get('state');
   const error = params.get('error');
 
-  // Clean URL after OAuth callback
-  if (code || error) {
-    window.history.replaceState({}, '', window.location.pathname);
-  }
+  if (code || error) window.history.replaceState({}, '', window.location.pathname);
 
-  if (error) {
-    showScreen('setup');
-    showError('setup-error', 'Spotify authorization was denied: ' + error);
-    return;
-  }
+  if (error) { showScreen('setup'); showError('setup-error', 'Spotify denied access: ' + error); return; }
 
   if (code) {
-    const savedState = sessionStorage.getItem('sp_state');
-    if (returnedState !== savedState) {
-      showScreen('setup');
-      showError('setup-error', 'State mismatch — possible CSRF. Please try again.');
-      return;
+    if (returnedState !== sessionStorage.getItem('sp_state')) {
+      showScreen('setup'); showError('setup-error', 'State mismatch — please try again.'); return;
     }
-
     try {
-      const tokens = await exchangeCode(code);
-      saveTokens(tokens);
+      saveTokens(await exchangeCode(code));
       sessionStorage.removeItem('sp_verifier');
       sessionStorage.removeItem('sp_state');
     } catch (err) {
-      showScreen('setup');
-      showError('setup-error', 'Failed to complete login: ' + err.message);
-      return;
+      showScreen('setup'); showError('setup-error', 'Login failed: ' + err.message); return;
     }
   }
 
-  // Check if we have a valid session
+  // Check for existing valid session
   try {
     const token = await getToken();
     if (token) {
-      const me = await getMe();
-      state.userId = me.id;
+      const me = await spApi('/me');
+      appState.userId = me.id;
       document.getElementById('user-display').textContent = me.display_name || me.id;
       showScreen('main');
       return;
@@ -1076,13 +1224,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   showScreen('setup');
 });
 
-// Allow Enter key on inputs
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    const active = document.querySelector('.screen.active')?.id;
-    if (active === 'screen-setup') startAuth();
-    if (active === 'screen-main') generate();
-  }
+  if (e.key !== 'Enter') return;
+  const active = document.querySelector('.screen.active')?.id;
+  if (active === 'screen-setup') startAuth();
+  if (active === 'screen-main') generate();
 });
 </script>
 </body>
