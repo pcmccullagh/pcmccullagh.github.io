@@ -545,7 +545,9 @@ async function spApi(path) {
   });
   if (!res.ok) {
     const e = await res.json().catch(() => ({}));
-    throw new Error(e.error?.message || `Spotify API error ${res.status}`);
+    const msg = e.error?.message || `Spotify API error ${res.status}`;
+    if (res.status === 403) throw new Error('Spotify returned 403 Forbidden — the playlist must be set to Public. Open it in Spotify → ··· → Make public.');
+    throw new Error(msg);
   }
   return res.json();
 }
