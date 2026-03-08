@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Spotify Playlist Generator</title>
+  <style>
+    :root {
+      --green: #1DB954;
+      --green-dark: #17a349;
+      --bg: #121212;
+      --surface: #1e1e1e;
+      --surface2: #282828;
+      --surface3: #333;
+      --text: #ffffff;
+      --text-muted: #b3b3b3;
+      --red: #e74c3c;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .screen {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 24px 20px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .screen.active { display: flex; }
+
+    /* ── Header ── */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .logo svg { flex-shrink: 0; }
+    .logo-text {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px 0;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .hero h1 span { color: var(--green); }
+    .hero p {
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 24px;
+      border-radius: 50px;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s, background 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      letter-spacing: 0.3px;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-green { background: var(--green); color: #000; }
+    .btn-green:hover { background: var(--green-dark); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 2px solid var(--surface3);
+    }
+    .btn-outline:hover { border-color: var(--text-muted); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Setup screen ── */
+    .setup-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .setup-step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--surface2);
+    }
+    .setup-step:last-child { border-bottom: none; padding-bottom: 0; }
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #000;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-text { font-size: 14px; line-height: 1.5; color: var(--text-muted); }
+    .step-text strong { color: var(--text); }
+    .step-text a { color: var(--green); text-decoration: none; }
+    .step-text code {
+      background: var(--surface2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: monospace;
+      word-break: break-all;
+    }
+
+    /* ── Inputs ── */
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .field input, .field select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1.5px solid var(--surface3);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 15px;
+      padding: 13px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input:focus, .field select:focus {
+      border-color: var(--green);
+    }
+    .field input::placeholder { color: var(--surface3); }
+
+    /* ── Progress ── */
+    .progress-wrap {
+      background: var(--surface2);
+      border-radius: 4px;
+      overflow: hidden;
+      height: 4px;
+      margin-bottom: 12px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--green);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .progress-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      min-height: 20px;
+    }
+
+    /* ── Loading spinner ── */
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--surface2);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 40px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Track list ── */
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      margin-top: 24px;
+    }
+
+    .track-list { list-style: none; }
+    .track-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--surface2);
+    }
+    .track-item:last-child { border-bottom: none; }
+    .track-num {
+      font-size: 13px;
+      color: var(--text-muted);
+      width: 22px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .track-art {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      object-fit: cover;
+      background: var(--surface3);
+      flex-shrink: 0;
+    }
+    .track-art-placeholder {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      background: var(--surface3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .track-info { flex: 1; min-width: 0; }
+    .track-name {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .track-artist {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .track-duration {
+      font-size: 12px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    /* ── Playlist header card ── */
+    .playlist-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .playlist-art {
+      width: 72px;
+      height: 72px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: var(--surface3);
+      flex-shrink: 0;
+    }
+    .playlist-info h2 {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .playlist-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ── Vibe tags ── */
+    .vibe-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .vibe-tag {
+      background: var(--surface2);
+      color: var(--green);
+      border-radius: 50px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ── Error banner ── */
+    .error-banner {
+      background: rgba(231, 76, 60, 0.15);
+      border: 1px solid rgba(231, 76, 60, 0.4);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #ff6b6b;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .error-banner.visible { display: block; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--green);
+      color: #000;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      transition: transform 0.3s ease;
+      z-index: 999;
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── Misc ── */
+    .divider { height: 1px; background: var(--surface2); margin: 20px 0; }
+    .text-center { text-align: center; }
+    .text-muted { color: var(--text-muted); font-size: 13px; }
+    .mt-auto { margin-top: auto; }
+    .mb-16 { margin-bottom: 16px; }
+    .mb-8 { margin-bottom: 8px; }
+    .gap-12 { display: flex; flex-direction: column; gap: 12px; }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+      margin-bottom: 24px;
+    }
+    .back-btn:hover { color: var(--text); }
+
+    .scrollable { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Sticky bottom actions */
+    .sticky-bottom {
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(transparent, var(--bg) 30%);
+      padding: 16px 0 24px;
+      margin-top: 8px;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     SCREEN 1: SETUP
+═══════════════════════════════════════════════ -->
+<div id="screen-setup" class="screen">
+  <div class="logo">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#1DB954"/>
+      <path d="M17.5 10.2c-3.2-1.9-8.4-2.1-11.4-1.1-.5.1-1-.1-1.2-.6-.1-.5.1-1 .6-1.2 3.5-1.1 9.2-.9 12.9 1.3.4.3.6.8.3 1.3-.3.4-.8.6-1.2.3zM17.2 13.1c-.2.4-.7.5-1.1.3-2.7-1.6-6.8-2.1-10-.1-.4.2-.9 0-1.1-.4-.2-.4 0-.9.4-1.1 3.6-2.2 8.2-1.6 11.3.2.4.2.5.7.5 1.1zM16 15.9c-.2.3-.6.4-.9.2-2.3-1.4-5.3-1.7-8.7-.9-.3.1-.7-.1-.8-.4-.1-.3.1-.7.4-.8 3.8-.8 7 .5 9.6 1 .3.2.5.6.4.9z" fill="#000"/>
+    </svg>
+    <span class="logo-text">Playlist Generator</span>
+  </div>
+
+  <div class="hero">
+    <h1>Generate a playlist with <span>all new songs</span></h1>
+    <p>Drop any Spotify playlist and we'll create a fresh one with the same vibe — zero overlapping tracks.</p>
+
+    <div id="setup-error" class="error-banner"></div>
+
+    <div class="setup-card">
+      <div class="setup-step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          Go to <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a> and create a free app.
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          In your app settings, add this exact redirect URI:<br />
+          <code id="redirect-uri-display"></code>
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          Paste your <strong>Client ID</strong> below and click Connect.
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Spotify Client ID</label>
+      <input id="client-id-input" type="text" placeholder="e.g. 3f2b9a…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+    </div>
+
+    <div class="gap-12">
+      <button class="btn btn-green" onclick="startAuth()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        Connect with Spotify
+      </button>
+    </div>
+  </div>
+
+  <p class="text-muted text-center">Your credentials are stored locally and never sent to any server.</p>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SCREEN 2: MAIN (enter playlist)
+═══════════════════════════════════════════════ -->
+<div id="screen-main" class="screen">
+  <div class="logo">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#1DB954"/>
+      <path d="M17.5 10.2c-3.2-1.9-8.4-2.1-11.4-1.1-.5.1-1-.1-1.2-.6-.1-.5.1-1 .6-1.2 3.5-1.1 9.2-.9 12.9 1.3.4.3.6.8.3 1.3-.3.4-.8.6-1.2.3zM17.2 13.1c-.2.4-.7.5-1.1.3-2.7-1.6-6.8-2.1-10-.1-.4.2-.9 0-1.1-.4-.2-.4 0-.9.4-1.1 3.6-2.2 8.2-1.6 11.3.2.4.2.5.7.5 1.1zM16 15.9c-.2.3-.6.4-.9.2-2.3-1.4-5.3-1.7-8.7-.9-.3.1-.7-.1-.8-.4-.1-.3.1-.7.4-.8 3.8-.8 7 .5 9.6 1 .3.2.5.6.4.9z" fill="#000"/>
+    </svg>
+    <span class="logo-text">Playlist Generator</span>
+  </div>
+
+  <div class="hero">
+    <h1>Paste your <span>Spotify</span> playlist</h1>
+    <p>We'll analyze the vibe and generate a fresh playlist of similar tracks you haven't heard yet.</p>
+
+    <div id="main-error" class="error-banner"></div>
+
+    <div class="field">
+      <label>Playlist URL or ID</label>
+      <input id="playlist-input" type="url"
+        placeholder="https://open.spotify.com/playlist/…"
+        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+    </div>
+
+    <div class="field">
+      <label>New playlist size</label>
+      <select id="playlist-size">
+        <option value="20">20 songs</option>
+        <option value="30" selected>30 songs</option>
+        <option value="50">50 songs</option>
+        <option value="75">75 songs</option>
+        <option value="100">100 songs</option>
+      </select>
+    </div>
+
+    <button class="btn btn-green" onclick="generate()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+      Generate New Playlist
+    </button>
+  </div>
+
+  <div class="divider"></div>
+  <button class="btn btn-outline" onclick="logout()">Disconnect Account</button>
+  <br />
+  <p class="text-muted text-center">Logged in as <span id="user-display">…</span></p>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SCREEN 3: LOADING
+═══════════════════════════════════════════════ -->
+<div id="screen-loading" class="screen">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+    <div class="spinner"></div>
+    <h2 style="font-size:20px; margin-bottom:12px; text-align:center;">Generating your playlist…</h2>
+    <div class="progress-wrap" style="width:100%">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    <p id="progress-label" class="progress-label text-center">Fetching original playlist…</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SCREEN 4: RESULTS
+═══════════════════════════════════════════════ -->
+<div id="screen-results" class="screen" style="padding-bottom:0">
+  <button class="back-btn" onclick="showScreen('main')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    Back
+  </button>
+
+  <div class="scrollable">
+    <div class="section-title">Original Playlist</div>
+    <div id="source-playlist-card" class="playlist-card"></div>
+
+    <div class="section-title">Detected Vibe</div>
+    <div id="vibe-tags" class="vibe-tags"></div>
+
+    <div class="section-title">Your New Playlist (<span id="result-count">0</span> songs)</div>
+    <div id="result-error" class="error-banner"></div>
+    <ul id="result-track-list" class="track-list"></ul>
+
+    <div class="sticky-bottom">
+      <div class="result-actions">
+        <button class="btn btn-green" id="save-btn" onclick="savePlaylist()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+          Save to Spotify
+        </button>
+        <button class="btn btn-outline" onclick="generate()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+          Regenerate
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+//  Constants & State
+// ══════════════════════════════════════════════
+const SCOPES = [
+  'playlist-read-private',
+  'playlist-read-collaborative',
+  'playlist-modify-public',
+  'playlist-modify-private',
+  'user-read-private',
+  'user-read-email',
+].join(' ');
+
+const REDIRECT_URI = window.location.origin + window.location.pathname;
+const API = 'https://api.spotify.com/v1';
+
+let state = {
+  accessToken: null,
+  userId: null,
+  sourcePlaylist: null,
+  generatedTracks: [],
+  audioFeaturesSummary: null,
+};
+
+// ══════════════════════════════════════════════
+//  Screens
+// ══════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ══════════════════════════════════════════════
+//  PKCE helpers
+// ══════════════════════════════════════════════
+function base64urlEncode(buffer) {
+  return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+async function generateCodeVerifier() {
+  const array = crypto.getRandomValues(new Uint8Array(64));
+  return base64urlEncode(array);
+}
+
+async function generateCodeChallenge(verifier) {
+  const data = new TextEncoder().encode(verifier);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return base64urlEncode(digest);
+}
+
+// ══════════════════════════════════════════════
+//  Auth
+// ══════════════════════════════════════════════
+async function startAuth() {
+  const clientId = document.getElementById('client-id-input').value.trim();
+  if (!clientId) {
+    showError('setup-error', 'Please enter your Spotify Client ID.');
+    return;
+  }
+
+  localStorage.setItem('sp_client_id', clientId);
+  clearError('setup-error');
+
+  const verifier = await generateCodeVerifier();
+  const challenge = await generateCodeChallenge(verifier);
+  const stateParam = base64urlEncode(crypto.getRandomValues(new Uint8Array(16)));
+
+  sessionStorage.setItem('sp_verifier', verifier);
+  sessionStorage.setItem('sp_state', stateParam);
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    response_type: 'code',
+    redirect_uri: REDIRECT_URI,
+    scope: SCOPES,
+    state: stateParam,
+    code_challenge_method: 'S256',
+    code_challenge: challenge,
+  });
+
+  window.location.href = 'https://accounts.spotify.com/authorize?' + params;
+}
+
+async function exchangeCode(code) {
+  const verifier = sessionStorage.getItem('sp_verifier');
+  const clientId = localStorage.getItem('sp_client_id');
+
+  const res = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: clientId,
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: REDIRECT_URI,
+      code_verifier: verifier,
+    }),
+  });
+
+  if (!res.ok) throw new Error('Token exchange failed: ' + (await res.text()));
+  const data = await res.json();
+  return data;
+}
+
+async function refreshToken(token) {
+  const clientId = localStorage.getItem('sp_client_id');
+  const res = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'refresh_token',
+      refresh_token: token,
+      client_id: clientId,
+    }),
+  });
+  if (!res.ok) throw new Error('Refresh failed');
+  return res.json();
+}
+
+function saveTokens(data) {
+  localStorage.setItem('sp_access_token', data.access_token);
+  if (data.refresh_token) localStorage.setItem('sp_refresh_token', data.refresh_token);
+  localStorage.setItem('sp_token_expires', Date.now() + data.expires_in * 1000);
+}
+
+async function getToken() {
+  const expires = parseInt(localStorage.getItem('sp_token_expires') || '0');
+  if (Date.now() < expires - 30000) {
+    return localStorage.getItem('sp_access_token');
+  }
+  const refresh = localStorage.getItem('sp_refresh_token');
+  if (!refresh) return null;
+  const data = await refreshToken(refresh);
+  saveTokens(data);
+  return data.access_token;
+}
+
+function logout() {
+  ['sp_access_token', 'sp_refresh_token', 'sp_token_expires'].forEach(k => localStorage.removeItem(k));
+  state.accessToken = null;
+  state.userId = null;
+  showScreen('setup');
+}
+
+// ══════════════════════════════════════════════
+//  Spotify API helpers
+// ══════════════════════════════════════════════
+async function api(path, opts = {}) {
+  const token = await getToken();
+  if (!token) throw new Error('Not authenticated');
+  const res = await fetch(API + path, {
+    ...opts,
+    headers: {
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/json',
+      ...(opts.headers || {}),
+    },
+  });
+  if (res.status === 401) {
+    logout();
+    throw new Error('Session expired. Please reconnect.');
+  }
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error ${res.status}`);
+  }
+  if (res.status === 204) return null;
+  return res.json();
+}
+
+async function getMe() {
+  return api('/me');
+}
+
+// Fetch ALL tracks from a playlist (handles pagination)
+async function getAllPlaylistTracks(playlistId) {
+  let tracks = [];
+  let url = `/playlists/${playlistId}/tracks?limit=50&fields=next,items(track(id,name,artists,album,duration_ms,uri))`;
+  while (url) {
+    const data = await api(url);
+    const valid = (data.items || []).filter(i => i.track && i.track.id);
+    tracks = tracks.concat(valid.map(i => i.track));
+    url = data.next ? data.next.replace(API, '') : null;
+  }
+  return tracks;
+}
+
+// Fetch audio features in batches of 100
+async function getAudioFeatures(trackIds) {
+  const features = [];
+  for (let i = 0; i < trackIds.length; i += 100) {
+    const batch = trackIds.slice(i, i + 100);
+    const data = await api('/audio-features?ids=' + batch.join(','));
+    features.push(...(data.audio_features || []).filter(Boolean));
+  }
+  return features;
+}
+
+function avg(arr) { return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0; }
+function clamp(v, min, max) { return Math.min(max, Math.max(min, v)); }
+
+function summarizeFeatures(features) {
+  const keys = ['danceability','energy','valence','acousticness','instrumentalness','speechiness','tempo'];
+  const summary = {};
+  keys.forEach(k => {
+    summary[k] = avg(features.map(f => f[k]).filter(v => v !== undefined));
+  });
+  return summary;
+}
+
+function vibeLabels(summary) {
+  const labels = [];
+  if (summary.energy > 0.7) labels.push('High Energy');
+  else if (summary.energy < 0.4) labels.push('Chill');
+  if (summary.danceability > 0.7) labels.push('Danceable');
+  if (summary.valence > 0.7) labels.push('Happy');
+  else if (summary.valence < 0.35) labels.push('Melancholic');
+  if (summary.acousticness > 0.6) labels.push('Acoustic');
+  if (summary.instrumentalness > 0.5) labels.push('Instrumental');
+  if (summary.speechiness > 0.33) labels.push('Wordy');
+  if (summary.tempo > 130) labels.push('Fast Tempo');
+  else if (summary.tempo < 90) labels.push('Slow Tempo');
+  if (labels.length === 0) labels.push('Balanced');
+  return labels;
+}
+
+// Pick up to 5 diverse seed tracks
+function pickSeeds(tracks) {
+  if (tracks.length <= 5) return tracks.map(t => t.id);
+  // Spread across the playlist to capture diversity
+  const step = Math.floor(tracks.length / 5);
+  return [0, step, step * 2, step * 3, step * 4].map(i => tracks[i].id);
+}
+
+async function getRecommendations(seedTrackIds, summary, limit, excludeIds) {
+  const exclude = new Set(excludeIds);
+  let collected = [];
+  let attempts = 0;
+  const maxAttempts = 6;
+
+  // We may need multiple calls using different seed combinations to avoid duplicates
+  // and reach the desired limit
+  const allSeeds = seedTrackIds;
+
+  while (collected.length < limit && attempts < maxAttempts) {
+    attempts++;
+    const seedsForCall = allSeeds.slice(0, 5);
+    const remaining = limit - collected.length;
+
+    const params = new URLSearchParams({
+      seed_tracks: seedsForCall.join(','),
+      limit: Math.min(100, remaining + 20), // ask for a few extra to account for filtering
+      target_danceability: summary.danceability.toFixed(3),
+      target_energy: summary.energy.toFixed(3),
+      target_valence: summary.valence.toFixed(3),
+      target_acousticness: summary.acousticness.toFixed(3),
+      target_tempo: summary.tempo.toFixed(1),
+    });
+
+    const data = await api('/recommendations?' + params);
+    const fresh = (data.tracks || []).filter(t => !exclude.has(t.id) && !collected.some(c => c.id === t.id));
+    collected = collected.concat(fresh);
+
+    if (data.tracks && data.tracks.length === 0) break; // Spotify has nothing more to offer
+  }
+
+  return collected.slice(0, limit);
+}
+
+function parsePlaylistId(input) {
+  input = input.trim();
+  // Full URL: https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M?si=...
+  const urlMatch = input.match(/playlist\/([A-Za-z0-9]+)/);
+  if (urlMatch) return urlMatch[1];
+  // Spotify URI: spotify:playlist:37i9dQZF1DXcBWIGoYBM5M
+  const uriMatch = input.match(/spotify:playlist:([A-Za-z0-9]+)/);
+  if (uriMatch) return uriMatch[1];
+  // Raw ID
+  if (/^[A-Za-z0-9]{15,30}$/.test(input)) return input;
+  return null;
+}
+
+function msToMin(ms) {
+  const s = Math.round(ms / 1000);
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
+
+// ══════════════════════════════════════════════
+//  UI helpers
+// ══════════════════════════════════════════════
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+
+function clearError(id) {
+  const el = document.getElementById(id);
+  el.textContent = '';
+  el.classList.remove('visible');
+}
+
+function setProgress(pct, label) {
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = label;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function renderTrackList(tracks) {
+  const list = document.getElementById('result-track-list');
+  list.innerHTML = '';
+  tracks.forEach((track, i) => {
+    const img = track.album?.images?.[0]?.url;
+    const artist = (track.artists || []).map(a => a.name).join(', ');
+    const li = document.createElement('li');
+    li.className = 'track-item';
+    li.innerHTML = `
+      <span class="track-num">${i + 1}</span>
+      ${img
+        ? `<img class="track-art" src="${img}" alt="" loading="lazy" />`
+        : `<div class="track-art-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="#555"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>`
+      }
+      <div class="track-info">
+        <div class="track-name">${escHtml(track.name)}</div>
+        <div class="track-artist">${escHtml(artist)}</div>
+      </div>
+      <span class="track-duration">${msToMin(track.duration_ms)}</span>
+    `;
+    list.appendChild(li);
+  });
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderSourceCard(playlist) {
+  const img = playlist.images?.[0]?.url;
+  const count = playlist.tracks?.total || 0;
+  document.getElementById('source-playlist-card').innerHTML = `
+    ${img ? `<img class="playlist-art" src="${img}" alt="" />` : ''}
+    <div class="playlist-info">
+      <h2>${escHtml(playlist.name)}</h2>
+      <p>${escHtml(playlist.owner?.display_name || '')} · ${count} songs</p>
+    </div>
+  `;
+}
+
+function renderVibeTags(summary) {
+  const labels = vibeLabels(summary);
+  document.getElementById('vibe-tags').innerHTML = labels.map(l =>
+    `<span class="vibe-tag">${l}</span>`
+  ).join('');
+}
+
+// ══════════════════════════════════════════════
+//  Main generate flow
+// ══════════════════════════════════════════════
+async function generate() {
+  const input = document.getElementById('playlist-input').value;
+  const desiredSize = parseInt(document.getElementById('playlist-size').value);
+  clearError('main-error');
+  clearError('result-error');
+
+  const playlistId = parsePlaylistId(input);
+  if (!playlistId) {
+    showError('main-error', 'Please enter a valid Spotify playlist URL or ID.');
+    return;
+  }
+
+  showScreen('loading');
+  setProgress(5, 'Fetching playlist details…');
+
+  try {
+    // 1. Get playlist metadata
+    const playlist = await api(`/playlists/${playlistId}?fields=id,name,images,owner,tracks(total)`);
+    state.sourcePlaylist = playlist;
+    renderSourceCard(playlist);
+    setProgress(20, `Found "${playlist.name}" — loading tracks…`);
+
+    // 2. Get all tracks
+    const tracks = await getAllPlaylistTracks(playlistId);
+    if (tracks.length === 0) throw new Error('This playlist appears to be empty.');
+    setProgress(40, `Analyzing ${tracks.length} tracks…`);
+
+    // 3. Audio features
+    const trackIds = tracks.map(t => t.id);
+    const features = await getAudioFeatures(trackIds.slice(0, 100)); // analyze up to 100
+    const summary = summarizeFeatures(features.filter(Boolean));
+    state.audioFeaturesSummary = summary;
+    renderVibeTags(summary);
+    setProgress(65, 'Finding similar songs…');
+
+    // 4. Pick seed tracks & get recommendations
+    const seeds = pickSeeds(tracks);
+    const recs = await getRecommendations(seeds, summary, desiredSize, trackIds);
+
+    if (recs.length === 0) throw new Error("Spotify couldn't find recommendations. Try a different playlist.");
+    state.generatedTracks = recs;
+
+    setProgress(90, 'Building your playlist…');
+    renderTrackList(recs);
+    document.getElementById('result-count').textContent = recs.length;
+
+    setProgress(100, 'Done!');
+    await new Promise(r => setTimeout(r, 400));
+    showScreen('results');
+
+  } catch (err) {
+    if (document.getElementById('screen-results').classList.contains('active')) {
+      showError('result-error', err.message);
+    } else {
+      showScreen('main');
+      showError('main-error', err.message);
+    }
+    console.error(err);
+  }
+}
+
+// ══════════════════════════════════════════════
+//  Save to Spotify
+// ══════════════════════════════════════════════
+async function savePlaylist() {
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+  clearError('result-error');
+
+  try {
+    const name = `${state.sourcePlaylist.name} — New Vibe`;
+    const desc = `Generated by Spotify Playlist Generator · Similar vibes to "${state.sourcePlaylist.name}" with all new songs.`;
+
+    // Create playlist
+    const newPlaylist = await api(`/users/${state.userId}/playlists`, {
+      method: 'POST',
+      body: JSON.stringify({ name, description: desc, public: false }),
+    });
+
+    // Add tracks in batches of 100
+    const uris = state.generatedTracks.map(t => t.uri);
+    for (let i = 0; i < uris.length; i += 100) {
+      await api(`/playlists/${newPlaylist.id}/tracks`, {
+        method: 'POST',
+        body: JSON.stringify({ uris: uris.slice(i, i + 100) }),
+      });
+    }
+
+    showToast('Playlist saved to your Spotify! 🎉');
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Saved to Spotify`;
+
+  } catch (err) {
+    showError('result-error', 'Failed to save: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg> Save to Spotify`;
+  }
+}
+
+// ══════════════════════════════════════════════
+//  Bootstrap
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+  // Show the redirect URI in setup instructions
+  document.getElementById('redirect-uri-display').textContent = REDIRECT_URI;
+
+  // Pre-fill stored client ID
+  const storedId = localStorage.getItem('sp_client_id');
+  if (storedId) document.getElementById('client-id-input').value = storedId;
+
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const returnedState = params.get('state');
+  const error = params.get('error');
+
+  // Clean URL after OAuth callback
+  if (code || error) {
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+
+  if (error) {
+    showScreen('setup');
+    showError('setup-error', 'Spotify authorization was denied: ' + error);
+    return;
+  }
+
+  if (code) {
+    const savedState = sessionStorage.getItem('sp_state');
+    if (returnedState !== savedState) {
+      showScreen('setup');
+      showError('setup-error', 'State mismatch — possible CSRF. Please try again.');
+      return;
+    }
+
+    try {
+      const tokens = await exchangeCode(code);
+      saveTokens(tokens);
+      sessionStorage.removeItem('sp_verifier');
+      sessionStorage.removeItem('sp_state');
+    } catch (err) {
+      showScreen('setup');
+      showError('setup-error', 'Failed to complete login: ' + err.message);
+      return;
+    }
+  }
+
+  // Check if we have a valid session
+  try {
+    const token = await getToken();
+    if (token) {
+      const me = await getMe();
+      state.userId = me.id;
+      document.getElementById('user-display').textContent = me.display_name || me.id;
+      showScreen('main');
+      return;
+    }
+  } catch (_) {}
+
+  showScreen('setup');
+});
+
+// Allow Enter key on inputs
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const active = document.querySelector('.screen.active')?.id;
+    if (active === 'screen-setup') startAuth();
+    if (active === 'screen-main') generate();
+  }
+});
+</script>
+</body>
+</html>
